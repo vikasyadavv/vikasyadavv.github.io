@@ -2271,3 +2271,32 @@ button,
     border-top: 0;
     margin-top: 0;
     padding-top: 0; }
+
+
+.publications-list .title a {
+  position: relative;
+  display: inline-block;
+  color: #000 !important;
+  text-decoration: none;
+  border-bottom: none !important;   /* 👈 this removes the dotted line */
+  transition: color 0.3s ease;
+}
+
+.publications-list .title a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background-color: #0077ff;
+  transition: width 0.3s ease;
+}
+
+.publications-list .title a:hover {
+  color: #f56565 !important;        /* text color changes to coral/red */
+}
+
+.publications-list .title a:hover::after {
+  width: 100%;
+}
