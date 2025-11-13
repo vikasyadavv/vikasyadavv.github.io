@@ -378,14 +378,14 @@ class ChatWidget {
         if (this.messageHistory.length === 0) {
             setTimeout(() => {
                 this.addMessage(
-                    "Hello! I'm Vikas's AI assistant. I can help you learn about his work, projects, and blog content. How can I assist you today?",
+                    "Hello! I'm Vikas's AI assistant. How can I assist you today?",
                     'bot',
                     {
                         suggestions: [
-                            "Tell me about Vikas's portfolio",
-                            "What are his latest projects?",
-                            "Show me recent blog posts",
-                            "How can I contact Vikas?"
+                            //"Tell me about Vikas's portfolio",
+                            //"What are his latest projects?",
+                            //"Show me recent blog posts",
+                            //"How can I contact Vikas?"
                         ]
                     }
                 );
