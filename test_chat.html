@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-container { max-width: 600px; margin: 0 auto; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .response { margin: 10px 0; padding: 15px; background: #f8f9fa; border-radius: 5px; white-space: pre-wrap; }
+        .error { background: #f8d7da; color: #721c24; }
+        .success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Chat Integration Test</h1>
+        
+        <button onclick="testN8NDirect()">Test N8N Direct</button>
+        <button onclick="testBackendAPI()">Test Backend API</button>
+        <button onclick="testChatWidget()">Test Chat Widget Function</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(title, content, isError = false) {
+            const div = document.createElement('div');
+            div.className = isError ? 'response error' : 'response success';
+            div.innerHTML = `<h3>${title}</h3><pre>${content}</pre>`;
+            resultsDiv.appendChild(div);
+        }
+        
+        async function testN8NDirect() {
+            try {
+                addResult('🔄 Testing N8N Direct...', 'Sending request...');
+                
+                const response = await fetch('https://n8n.vikasyadav.live/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: "Hello from test page",
+                        sessionId: "test_" + Date.now()
+                    })
+                });
+                
+                const data = await response.json();
+                addResult('✅ N8N Direct Response', JSON.stringify(data, null, 2));
+                
+            } catch (error) {
+                addResult('❌ N8N Direct Error', error.message, true);
+            }
+        }
+        
+        async function testBackendAPI() {
+            try {
+                addResult('🔄 Testing Backend API...', 'Sending request...');
+                
+                const response = await fetch('https://api.vikasyadav.live/api/chat/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: "Hello from test page",
+                        sessionId: "test_" + Date.now()
+                    })
+                });
+                
+                const data = await response.json();
+                addResult('✅ Backend API Response', JSON.stringify(data, null, 2));
+                
+            } catch (error) {
+                addResult('❌ Backend API Error', error.message, true);
+            }
+        }
+        
+        async function testChatWidget() {
+            try {
+                addResult('🔄 Testing Chat Widget Logic...', 'Simulating chat widget...');
+                
+                // Simulate the exact same call as the chat widget
+                const response = await fetch('https://n8n.vikasyadav.live/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: "Who is Vikas Yadav?",
+                        sessionId: "chat_" + Date.now() + "_test",
+                        context: { page: "/test", messageCount: 1 },
+                        metadata: {
+                            website: 'vikasyadav.live',
+                            userAgent: navigator.userAgent,
+                            timestamp: new Date().toISOString()
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Process like chat widget
+                const aiResponse = data.output || data.response || data.message;
+                const suggestions = data.suggestions || [
+                    "Tell me about Vikas's projects",
+                    "Show me his latest blog posts", 
+                    "How can I contact him?",
+                    "What technologies does he use?"
+                ];
+                
+                addResult('✅ Chat Widget Simulation', 
+                    `Response: ${aiResponse}\n\nSuggestions: ${suggestions.join(', ')}`);
+                
+            } catch (error) {
+                addResult('❌ Chat Widget Error', error.message, true);
+            }
+        }
+    </script>
+</body>
+</html>

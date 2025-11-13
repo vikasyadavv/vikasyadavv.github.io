@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>OCR Document Processing - VikasYadav.live</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Advanced OCR document processing tool with multi-language support and high accuracy text extraction." />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+
+					<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<ul class="icons">
+							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/vikasyadavv" class="icon brands fa-github" target="_blank" rel="noopener"><span class="label">Github</span></a></li>
+						</ul>
+					</header>
+
+					<!-- Content -->
+					<section>
+						<header class="main">
+							<h1>OCR Document Processing</h1>
+							<p>Extract text from images and documents with high accuracy</p>
+						</header>
+
+						<div class="row">
+							<div class="col-8 col-12-small">
+								
+								<!-- Upload Section -->
+								<section class="box">
+									<h2>Upload Document</h2>
+									<form id="ocr-form" enctype="multipart/form-data">
+										<div class="row gtr-uniform">
+											<div class="col-12">
+												<input type="file" id="file-input" name="file" accept="image/*,.pdf" required />
+												<small>Supported formats: JPEG, PNG, WebP, TIFF, PDF (max 10MB)</small>
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<input type="checkbox" id="include-details" name="includeDetails" />
+												<label for="include-details">Include detailed analysis</label>
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<select name="language" id="language">
+													<option value="eng">English</option>
+													<option value="spa">Spanish</option>
+													<option value="fra">French</option>
+													<option value="deu">German</option>
+													<option value="hin">Hindi</option>
+												</select>
+											</div>
+											<div class="col-12">
+												<input type="submit" value="Process Document" class="button primary" />
+											</div>
+										</div>
+									</form>
+								</section>
+
+								<!-- URL Processing Section -->
+								<section class="box">
+									<h2>Process Image from URL</h2>
+									<form id="ocr-url-form">
+										<div class="row gtr-uniform">
+											<div class="col-9 col-12-xsmall">
+												<input type="url" id="image-url" name="imageUrl" placeholder="Enter image URL..." required />
+											</div>
+											<div class="col-3 col-12-xsmall">
+												<input type="submit" value="Process" class="button primary fit" />
+											</div>
+										</div>
+									</form>
+								</section>
+
+								<!-- Results Section -->
+								<section id="results-section" style="display: none;">
+									<header class="major">
+										<h2>Extraction Results</h2>
+									</header>
+									
+									<div class="box">
+										<div class="row">
+											<div class="col-6 col-12-small">
+												<h3>File Information</h3>
+												<ul id="file-info">
+													<!-- File details will be populated here -->
+												</ul>
+											</div>
+											<div class="col-6 col-12-small">
+												<h3>Processing Statistics</h3>
+												<ul id="processing-stats">
+													<!-- Processing stats will be populated here -->
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<div class="box">
+										<h3>Extracted Text</h3>
+										<textarea id="extracted-text" rows="15" readonly style="width: 100%; font-family: monospace;"></textarea>
+										<div class="row gtr-uniform" style="margin-top: 1rem;">
+											<div class="col-6 col-12-xsmall">
+												<button id="copy-text" class="button">Copy Text</button>
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<button id="download-text" class="button alt">Download as TXT</button>
+											</div>
+										</div>
+									</div>
+
+									<!-- Detailed Analysis (if requested) -->
+									<div id="detailed-analysis" class="box" style="display: none;">
+										<h3>Detailed Analysis</h3>
+										<div id="analysis-content">
+											<!-- Detailed analysis will be populated here -->
+										</div>
+									</div>
+								</section>
+
+								<!-- Error Section -->
+								<section id="error-section" class="box" style="display: none;">
+									<h3>Processing Error</h3>
+									<div id="error-message" class="message error"></div>
+								</section>
+
+							</div>
+							
+							<div class="col-4 col-12-small">
+								
+								<!-- Info Section -->
+								<section class="box">
+									<h3>About OCR Processing</h3>
+									<p>Our OCR (Optical Character Recognition) system uses advanced machine learning algorithms to extract text from images and documents with high accuracy.</p>
+									
+									<h4>Features:</h4>
+									<ul>
+										<li>Multi-language support</li>
+										<li>High accuracy text extraction</li>
+										<li>PDF and image processing</li>
+										<li>Confidence scoring</li>
+										<li>Word-level analysis</li>
+										<li>Secure processing</li>
+									</ul>
+								</section>
+
+								<!-- Tips Section -->
+								<section class="box">
+									<h3>Processing Tips</h3>
+									<ul>
+										<li><strong>Image Quality:</strong> Use high-resolution, clear images for best results</li>
+										<li><strong>Lighting:</strong> Ensure good lighting and contrast</li>
+										<li><strong>Orientation:</strong> Make sure text is properly oriented</li>
+										<li><strong>Language:</strong> Select the correct language for better accuracy</li>
+										<li><strong>File Size:</strong> Larger files may take longer to process</li>
+									</ul>
+								</section>
+
+								<!-- Recent Uploads -->
+								<section class="box">
+									<h3>Processing History</h3>
+									<div id="processing-history">
+										<p><em>No recent processing history</em></p>
+									</div>
+								</section>
+
+							</div>
+						</div>
+
+					</section>
+
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div id="sidebar">
+				<div class="inner">
+
+					<!-- Search -->
+					<section id="search" class="alt">
+						<form method="post" action="#">
+							<input type="text" name="query" id="query" placeholder="Search..." />
+						</form>
+					</section>
+
+					<!-- Menu -->
+					<nav id="menu">
+						<header class="major">
+							<h2>Navigation</h2>
+						</header>
+						<ul>
+							<li><a href="../index.html">Home</a></li>
+							<li><a href="../portfolio.html">Portfolio</a></li>
+							<li><a href="../projects.html">Projects</a></li>
+							<li>
+								<span class="opener active">Tools & Services</span>
+								<ul>
+									<li><a href="ocr.html" class="active">OCR Document Processing</a></li>
+									<li><a href="webcrawler.html">Web Content Extractor</a></li>
+									<li><a href="chat.html">AI Assistant</a></li>
+									<li><a href="analytics.html">Analytics Dashboard</a></li>
+								</ul>
+							</li>
+							<li><a href="../about.html">About Me</a></li>
+							<li><a href="../contact.html">Contact</a></li>
+						</ul>
+					</nav>
+
+					<!-- Contact Info -->
+					<section>
+						<header class="major">
+							<h2>Get in Touch</h2>
+						</header>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="mailto:info@vikasyadav.live">info@vikasyadav.live</a></li>
+							<li class="icon brands fa-telegram-plane"><a href="https://t.me/cheminations" target="_blank">@cheminations</a></li>
+						</ul>
+					</section>
+
+					<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 2024 Vikas Yadav. All rights reserved.</p>
+					</footer>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Chat Widget -->
+		<div id="chat-widget" class="chat-widget">
+			<div id="chat-toggle" class="chat-toggle">
+				<i class="fas fa-comments"></i>
+			</div>
+			<div id="chat-window" class="chat-window" style="display: none;">
+				<div class="chat-header">
+					<h4>AI Assistant</h4>
+					<button id="chat-close" class="chat-close">&times;</button>
+				</div>
+				<div id="chat-messages" class="chat-messages"></div>
+				<div class="chat-input-container">
+					<input type="text" id="chat-input" placeholder="Ask about OCR features..." />
+					<button id="chat-send" class="chat-send-btn">
+						<i class="fas fa-paper-plane"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
+		<script src="../assets/js/analytics.js"></script>
+		<script src="../assets/js/chat.js"></script>
+		<script src="../assets/js/app.js"></script>
+		<script src="../assets/js/ocr.js"></script>
+
+	</body>
+</html>

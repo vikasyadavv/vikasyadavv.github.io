@@ -1,0 +1,830 @@
+<!DOCTYPE HTML>
+<!--
+	VikasYadav.live - Portfolio & CV
+	Built with security, performance, and modern features in mind
+-->
+<html>
+	<head>
+		<title>Portfolio & CV - Vikas Yadav</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Vikas Yadav's Portfolio and CV - AI Researcher, Full Stack Developer, and Technology Enthusiast with expertise in Machine Learning, Deep Learning, and Generative AI." />
+		<meta name="keywords" content="Vikas Yadav, CV, Portfolio, AI Researcher, Machine Learning, Deep Learning, IIT Delhi, PhD, Spectroscopy" />
+		<meta name="author" content="Vikas Yadav" />
+		
+		<!-- Open Graph Meta Tags -->
+		<meta property="og:title" content="Portfolio & CV - Vikas Yadav" />
+		<meta property="og:description" content="Complete CV and Portfolio of Vikas Yadav - AI Researcher with expertise in ML/DL, NLP, and computational modeling." />
+		<meta property="og:image" content="https://vikasyadav.live/images/CV_image_Vikas_Yadav.JPG" />
+		<meta property="og:url" content="https://vikasyadav.live/portfolio.html" />
+		<meta property="og:type" content="profile" />
+		
+		<!-- Favicon -->
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		
+		<style>
+			.cv-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2em;
+			}
+			
+			.cv-header {
+				text-align: center;
+				margin-bottom: 3em;
+				border-bottom: 2px solid #f56565;
+				padding-bottom: 2em;
+			}
+			
+			.cv-photo {
+				width: 200px;
+				height: 200px;
+				border-radius: 50%;
+				object-fit: cover;
+				border: 4px solid #f56565;
+				margin-bottom: 1.5em;
+				box-shadow: 0 8px 32px rgba(245, 101, 101, 0.3);
+			}
+			
+			.cv-name {
+				font-size: 3em;
+				font-weight: bold;
+				color: #2c3e50;
+				margin-bottom: 0.5em;
+			}
+			
+			.cv-title {
+				font-size: 1.3em;
+				color: #f56565;
+				margin-bottom: 1em;
+			}
+			
+			.cv-contact {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 2em;
+				margin-bottom: 1em;
+			}
+			
+			.cv-contact-item {
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+				color: #34495e;
+			}
+			
+			.cv-contact-item i {
+				color: #f56565;
+			}
+			
+			.cv-section {
+				margin-bottom: 3em;
+			}
+			
+			.cv-section-title {
+				font-size: 2em;
+				color: #2c3e50;
+				border-bottom: 2px solid #f56565;
+				padding-bottom: 0.5em;
+				margin-bottom: 1.5em;
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+			}
+			
+			.cv-section-title i {
+				color: #f56565;
+			}
+			
+			.education-item, .experience-item {
+				background: #f8f9fa;
+				border-left: 4px solid #f56565;
+				padding: 1.5em;
+				margin-bottom: 1.5em;
+				border-radius: 8px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			}
+			
+			.education-item h3, .experience-item h3 {
+				color: #2c3e50;
+				font-size: 1.4em;
+				margin-bottom: 0.5em;
+			}
+			
+			.education-item .institution, .experience-item .company {
+				color: #f56565;
+				font-weight: bold;
+				font-size: 1.1em;
+				margin-bottom: 0.5em;
+			}
+			
+			.education-item .year, .experience-item .year {
+				color: #7f8c8d;
+				font-weight: bold;
+				margin-bottom: 1em;
+			}
+			
+			.skills-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2em;
+			}
+			
+			.skill-category {
+				background: #f8f9fa;
+				padding: 1.5em;
+				border-radius: 8px;
+				border-top: 4px solid #f56565;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			}
+			
+			.skill-category h4 {
+				color: #2c3e50;
+				font-size: 1.2em;
+				margin-bottom: 1em;
+				display: flex;
+				align-items: center;
+				gap: 0.5em;
+			}
+			
+			.skill-category i {
+				color: #f56565;
+			}
+			
+			.skill-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+			}
+			
+			.skill-tag {
+				background: #f56565;
+				color: white;
+				padding: 0.3em 0.8em;
+				border-radius: 20px;
+				font-size: 0.9em;
+				font-weight: 500;
+			}
+			
+			.publications-list {
+				list-style: none;
+				padding: 0;
+			}
+			
+			.publication-item {
+				background: #f8f9fa;
+				border-left: 4px solid #f56565;
+				padding: 1.2em;
+				margin-bottom: 1em;
+				border-radius: 8px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			}
+			
+			.publication-item .title {
+				color: #2c3e50;
+				font-weight: bold;
+				margin-bottom: 0.5em;
+			}
+			
+			.publication-item .journal {
+				color: #f56565;
+				font-style: italic;
+			}
+			
+			.awards-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+			}
+			
+			.award-item {
+				background: linear-gradient(135deg, #f56565, #ff7b7b);
+				color: white;
+				padding: 1.5em;
+				border-radius: 8px;
+				text-align: center;
+				box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+			}
+			
+			.award-item i {
+				font-size: 2em;
+				margin-bottom: 0.5em;
+			}
+			
+			.award-item h4 {
+				font-size: 1.1em;
+				margin-bottom: 0.5em;
+			}
+			
+			.languages-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1.5em;
+				justify-content: center;
+			}
+			
+			.language-item {
+				background: #f8f9fa;
+				border: 2px solid #f56565;
+				padding: 1em 1.5em;
+				border-radius: 25px;
+				text-align: center;
+				min-width: 120px;
+			}
+			
+			.language-item .language {
+				font-weight: bold;
+				color: #2c3e50;
+				display: block;
+			}
+			
+			.language-item .level {
+				color: #f56565;
+				font-size: 0.9em;
+			}
+			
+			@media (max-width: 768px) {
+				.cv-contact {
+					flex-direction: column;
+					align-items: center;
+				}
+				
+				.cv-name {
+					font-size: 2.2em;
+				}
+				
+				.skills-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+
+					<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<ul class="icons">
+							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://scholar.google.com/citations?hl=en&user=C1cWkWYAAAAJ" class="icon brands fa-google" target="_blank" rel="noopener"><span class="label">Google Scholar</span></a></li>
+							<li><a href="https://github.com/vikasyadavv" class="icon brands fa-github" target="_blank" rel="noopener"><span class="label">Github</span></a></li>
+							<li><a href="https://medium.com/@vikasyadav_" class="icon brands fa-medium-m" target="_blank" rel="noopener"><span class="label">Medium</span></a></li>
+						</ul>
+					</header>
+
+					<!-- CV Container -->
+					<div class="cv-container">
+						
+						<!-- CV Header -->
+						<div class="cv-header">
+							<img src="images/CV_image_Vikas_Yadav.JPG" alt="Vikas Yadav" class="cv-photo">
+							<h1 class="cv-name">VIKAS YADAV</h1>
+							<p class="cv-title">Ph.D. graduate in deep learning & generative AI driven spectroscopy and computational modeling</p>
+							
+							<div class="cv-contact">
+								<div class="cv-contact-item">
+									<i class="icon solid fa-envelope"></i>
+									<span>vikas.yadav@chemistry.iitd.ac.in</span>
+								</div>
+								<div class="cv-contact-item">
+									<i class="icon solid fa-phone"></i>
+									<span>+91-7876749665</span>
+								</div>
+								<div class="cv-contact-item">
+									<i class="icon solid fa-map-marker-alt"></i>
+									<span>MS-724, Main Building, IIT Delhi, Hauz Khas, India, 110016</span>
+								</div>
+							</div>
+							
+							<div class="cv-contact">
+								<div class="cv-contact-item">
+									<i class="icon brands fa-linkedin"></i>
+									<a href="https://www.linkedin.com/in/vikasyadavv/" target="_blank">LinkedIn</a>
+								</div>
+								<div class="cv-contact-item">
+									<i class="icon brands fa-github"></i>
+									<a href="https://github.com/vikasyadavv" target="_blank">Github</a>
+								</div>
+								<div class="cv-contact-item">
+									<i class="icon brands fa-google"></i>
+									<a href="https://scholar.google.com/citations?hl=en&user=C1cWkWYAAAAJ" target="_blank">Google Scholar</a>
+								</div>
+							</div>
+							
+							<div style="text-align: center; margin-top: 2em;">
+								<a href="#" onclick="window.print()" class="button big primary">
+									<i class="icon solid fa-download"></i> Download CV as PDF
+								</a>
+							</div>
+						</div>
+
+						<!-- Professional Summary -->
+						<section class="cv-section">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-user"></i>
+								Professional Summary
+							</h2>
+							<p style="font-size: 1.1em; line-height: 1.6; color: #34495e; text-align: justify;">
+								PhD in Deep Learning with expertise in generative AI–driven spectroscopy and computational modeling. Skilled in ML/DL, LLMs, NLP powered RAG-based systems, and end-to-end deployment, with a focus on building scalable and robust AI automation solutions.
+							</p>
+						</section>
+
+						<!-- Work Experience -->
+						<section class="cv-section" id="experience">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-briefcase"></i>
+								Work and Research Experience
+							</h2>
+							
+							<div class="experience-item">
+								<h3>Early-Doc Fellow</h3>
+								<div class="company">Indian Institute of Technology Delhi, India</div>
+								<div class="year">2025-Present</div>
+								<div class="summary-bullets">
+									<ul style="list-style: none; padding-left: 0;">
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-search" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Intelligent Search Systems:</strong> Build NLP and LLM-powered intelligent search systems with RAG for advanced query handling, structured insights, and large-scale research automation from scientific text corpora with 83% precision
+										</li>
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-brain" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Advanced AI Models:</strong> Developed physics-informed neural network and GAN models for solving complex equations and deployed generative AI-driven pipelines integrating deep learning, automation, and intelligent systems
+										</li>
+									</ul>
+								</div>
+							</div>
+							
+							<div class="experience-item">
+								<h3>Research during PhD</h3>
+								<div class="company">Indian Institute of Technology Delhi, India</div>
+								<div class="year">2019-2025</div>
+								<div class="summary-bullets">
+									<ul style="list-style: none; padding-left: 0;">
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-chart-line" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Generative AI & Deep Learning:</strong> Applied generative AI, deep learning, and advanced data analytics to address challenges of weak signals, spectral complexity, and noise in experimental datasets with an accuracy of 92%
+										</li>
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-cogs" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>ML Model Development:</strong> Developed models for classification and regression tasks, automated complex data interpretation, and improved resolution and feature extraction through GANs and deep neural networks
+										</li>
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-database" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Data Framework Design:</strong> Built frameworks for handling and representing large, high-dimensional data, enabling predictive insights and robust decision-making
+										</li>
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-code" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Computational Strategies:</strong> Integrated computational strategies using Python, MATLAB, and developed in-house codes, alongside physics-informed models, to simulate and optimize light–matter interactions and smart substrate design
+										</li>
+										<li style="margin-bottom: 0.8em; padding-left: 1.5em; position: relative;">
+											<i class="icon solid fa-award" style="color: #f56565; position: absolute; left: 0; top: 0.2em;"></i>
+											<strong>Patent Achievement:</strong> This research led to a patent on enhancing data resolution using generative AI-driven methods
+										</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<!-- Education -->
+						<section class="cv-section" id="education">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-graduation-cap"></i>
+								Education and Training
+							</h2>
+							
+							<div class="education-item">
+								<h3>Ph.D. in AI & ML, Generative AI, Chemistry</h3>
+								<div class="institution">Indian Institute of Technology Delhi, India (IIT Delhi)</div>
+								<div class="year">2025</div>
+								<p>Specialized in deep learning & generative AI driven spectroscopy and computational modeling with focus on machine learning applications in chemical analysis.</p>
+							</div>
+							
+							<div class="education-item">
+								<h3>M.S. in Chemistry</h3>
+								<div class="institution">Kurukshetra University, India</div>
+								<div class="year">2018</div>
+								<p>Advanced studies in theoretical and computational chemistry with emphasis on spectroscopic methods.</p>
+							</div>
+							
+							<div class="education-item">
+								<h3>B.S. in Physics, Chemistry & Mathematics</h3>
+								<div class="institution">Kurukshetra University, India</div>
+								<div class="year">2016</div>
+								<p>Comprehensive foundation in physical sciences with strong mathematical background.</p>
+							</div>
+						</section>
+
+						<!-- Technical Skills -->
+						<section class="cv-section" id="skills">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-cogs"></i>
+								Technical & Core Skills
+							</h2>
+							
+							<div class="skills-grid">
+								<div class="skill-category">
+									<h4><i class="icon solid fa-brain"></i>Machine Learning & AI</h4>
+									<div class="skill-tags">
+										<span class="skill-tag">GANs</span>
+										<span class="skill-tag">CNNs</span>
+										<span class="skill-tag">RNNs</span>
+										<span class="skill-tag">Transformers</span>
+										<span class="skill-tag">BERT</span>
+										<span class="skill-tag">PINNs</span>
+										<span class="skill-tag">Neural Operators</span>
+										<span class="skill-tag">RAG for NLP</span>
+										<span class="skill-tag">Agentic AI</span>
+										<span class="skill-tag">MCP</span>
+										<span class="skill-tag">LLM-based systems</span>
+									</div>
+								</div>
+								
+								<div class="skill-category">
+									<h4><i class="icon solid fa-code"></i>Programming & Tools</h4>
+									<div class="skill-tags">
+										<span class="skill-tag">Python</span>
+										<span class="skill-tag">PyTorch</span>
+										<span class="skill-tag">TensorFlow</span>
+										<span class="skill-tag">LLM orchestration</span>
+										<span class="skill-tag">MATLAB</span>
+										<span class="skill-tag">COMSOL</span>
+										<span class="skill-tag">Lumerical FDTD</span>
+										<span class="skill-tag">Linux</span>
+										<span class="skill-tag">Blender</span>
+										<span class="skill-tag">Adobe</span>
+									</div>
+								</div>
+								
+								<div class="skill-category">
+									<h4><i class="icon solid fa-chart-line"></i>Data Science & Domain</h4>
+									<div class="skill-tags">
+										<span class="skill-tag">Signal processing</span>
+										<span class="skill-tag">Data wrangling</span>
+										<span class="skill-tag">Visualization</span>
+										<span class="skill-tag">Raman spectroscopy</span>
+										<span class="skill-tag">Imaging</span>
+										<span class="skill-tag">Computational chemistry</span>
+										<span class="skill-tag">Nanomaterials</span>
+										<span class="skill-tag">Bioinformatics</span>
+									</div>
+								</div>
+								
+								<div class="skill-category">
+									<h4><i class="icon solid fa-tools"></i>Other Technologies</h4>
+									<div class="skill-tags">
+										<span class="skill-tag">Git</span>
+										<span class="skill-tag">Docker</span>
+										<span class="skill-tag">N8N automation</span>
+										<span class="skill-tag">Cloudflare tunnels</span>
+										<span class="skill-tag">HPC clusters</span>
+										<span class="skill-tag">LaTeX</span>
+										<span class="skill-tag">Scientific writing</span>
+										<span class="skill-tag">Peer review</span>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Publications and Patents -->
+						<section class="cv-section" id="publications">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-file-alt"></i>
+								Selected Publications and Patents
+							</h2>
+							
+							<h3 style="color: #f56565; margin-bottom: 1em;">Peer Reviewed Papers (16 research articles, 1 Book Chapter, and 1 Patent)</h3>
+							
+							<ol class="publications-list">
+								<li class="publication-item">
+									<div class="title">Shining light on DNA mutations through machine learning augmented vibrational spectroscopy</div>
+									<div class="journal">Analytical Chemistry, 2025</div>
+								</li>
+								<li class="publication-item">
+									<div class="title">Multivariate and Machine Learning-Derived Virtual Staining and Biochemical Quantification of Cancer Cells through Vibrational Hyperspectral Imaging</div>
+									<div class="journal">Analytical Chemistry, 2025</div>
+								</li>
+								<li class="publication-item">
+									<div class="title">GAN-assisted high-resolution Raman spectroscopy from low-resolution spectrometer for automated barcoding and drug identification</div>
+									<div class="journal">In Review</div>
+								</li>
+								<li class="publication-item">
+									<div class="title">Recent Advances in Nanoporous NOx Gas Sensors: Synergizing Raman Spectroscopy, IoT, and Machine Learning for High-Performance Detection</div>
+									<div class="journal">Nanoscale, 2025</div>
+								</li>
+								<li class="publication-item">
+									<div class="title">Unlocking High-Resolution Raman Spectra from Diffraction Patterns with GANs</div>
+									<div class="journal">In Review</div>
+								</li>
+							</ol>
+							
+							<h3 style="color: #f56565; margin: 2em 0 1em 0;" id="patents">Patents</h3>
+							<div class="publication-item">
+								<div class="title">Enhancing the resolution of raman spectra through Generative AI</div>
+								<div>Yadav, V.; Tiwari, A.; and Siddhanta, S.</div>
+								<div class="journal">Indian Patent (Application No: 202411029912, PD056676IN-SC)</div>
+							</div>
+						</section>
+
+						<!-- Awards and Honors -->
+						<section class="cv-section" id="awards">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-trophy"></i>
+								Awards and Honors
+							</h2>
+							
+							<div class="awards-grid">
+								<div class="award-item">
+									<i class="icon solid fa-microphone"></i>
+									<h4>Oral Presentation</h4>
+									<p>ICORS 2024, Rome<br>ACS Spring 2025, USA</p>
+								</div>
+								<div class="award-item">
+									<i class="icon solid fa-certificate"></i>
+									<h4>Best Poster Prize</h4>
+									<p>HealthTech Horizons<br>IIT Delhi, 2024</p>
+								</div>
+								<div class="award-item">
+									<i class="icon solid fa-award"></i>
+									<h4>Early Doc Fellowship</h4>
+									<p>Research Excellence<br>IIT Delhi, 2025</p>
+								</div>
+								<div class="award-item">
+									<i class="icon solid fa-plane"></i>
+									<h4>Travel Awards</h4>
+									<p>Research Excellence Travel Award<br>RSTA, IIT Delhi</p>
+								</div>
+								<div class="award-item">
+									<i class="icon solid fa-graduation-cap"></i>
+									<h4>CSIR-UGC NET JRF</h4>
+									<p>AIR 83 & 89<br>National Fellowship</p>
+								</div>
+								<div class="award-item">
+									<i class="icon solid fa-check-circle"></i>
+									<h4>GATE Qualified</h4>
+									<p>2019 & 2020<br>National Examination</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Languages -->
+						<section class="cv-section">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-globe"></i>
+								Communication & Linguistic Proficiency
+							</h2>
+							
+							<div class="languages-list">
+								<div class="language-item">
+									<span class="language">English</span>
+									<span class="level">Fluent</span>
+								</div>
+								<div class="language-item">
+									<span class="language">Hindi</span>
+									<span class="level">Native</span>
+								</div>
+								<div class="language-item">
+									<span class="language">Punjabi</span>
+									<span class="level">Basic</span>
+								</div>
+								<div class="language-item">
+									<span class="language">German</span>
+									<span class="level">A1</span>
+								</div>
+							</div>
+						</section>
+
+						<!-- Teaching and Supervision -->
+						<section class="cv-section" id="teaching">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-chalkboard-teacher"></i>
+								Teaching and Supervision Experience
+							</h2>
+							
+							<div class="experience-item">
+								<h3>Courses Taught</h3>
+								<p><strong>Specialized Training:</strong> Deep Learning Specialization (MATLAB/MathWorks, Python) | Machine Learning in Spectroscopy | Cheminformatics | Molecular modelling & Thermodynamics | Linux for advanced expertise | Docker & N8N</p>
+							</div>
+							
+							<div class="experience-item">
+								<h3>Student Supervision</h3>
+								<p><strong>Supervised:</strong> 3+ Master's students in ML-assisted spectroscopy projects, providing guidance on research methodology, data analysis, and academic writing.</p>
+							</div>
+						</section>
+
+						<!-- References -->
+						<section class="cv-section">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-users"></i>
+								References
+							</h2>
+							
+							<div class="skills-grid">
+								<div class="skill-category">
+									<h4>Prof. Soumik Siddhanta</h4>
+									<p>Department of Chemistry<br>
+									Indian Institute of Technology, Delhi India<br>
+									<strong>Email:</strong> soumik@iitd.ac.in<br>
+									<strong>Tel:</strong> +91-9560020445</p>
+								</div>
+								
+								<div class="skill-category">
+									<h4>Prof. Tarak Karmakar</h4>
+									<p>Department of Chemistry<br>
+									Indian Institute of Technology, Delhi, India<br>
+									<strong>Email:</strong> tkarmakar@iitd.ac.in<br>
+									<strong>Tel:</strong> +91 11 2659-8549</p>
+								</div>
+								
+								<div class="skill-category">
+									<h4>Prof. Rupesh Chaturvedi</h4>
+									<p>School of Biotechnology<br>
+									Jawaharlal Nehru University, New Delhi, India<br>
+									<strong>Email:</strong> rupesh@mail.jnu.ac.in<br>
+									<strong>Tel:</strong> +91-9354887164</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Professional Memberships -->
+						<section class="cv-section">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-id-card"></i>
+								Professional Memberships & Activities
+							</h2>
+							
+							<div class="experience-item">
+								<h3>Memberships</h3>
+								<p><strong>American Chemical Society</strong> - Active member contributing to the advancement of chemical sciences</p>
+							</div>
+							
+							<div class="experience-item">
+								<h3>Referee & Reviewer</h3>
+								<p><strong>Journals:</strong> Analytical Methods; RSC Advances; Digital Discovery - Providing peer review services for leading scientific publications</p>
+							</div>
+						</section>
+
+						<!-- Conference Presentations -->
+						<section class="cv-section" id="conferences">
+							<h2 class="cv-section-title">
+								<i class="icon solid fa-presentation"></i>
+								Conferences: Presentations and Posters
+							</h2>
+							
+							<p style="color: #f56565; font-weight: bold; margin-bottom: 1.5em;">16 conferences, 2 abroad presentations (USA & Rome)</p>
+							
+							<div class="experience-item">
+								<h3>International Presentations</h3>
+								<ol>
+									<li><strong>Poster presentation</strong> in "ACS Spring 2025" held in San Diego, USA March 23-27, 2025.</li>
+									<li><strong>Oral presentation</strong> in "International Conference on Raman spectroscopy 2024 (ICORS-2024)" held in Rome, Italy organized by Sapienza University de Roma.</li>
+									<li><strong>Poster presented</strong> in "HealthTech Horizons: Integrating Bioimaging, Diagnostics, and Therapy" organized by IIT Delhi, India (Best poster prize)</li>
+								</ol>
+							</div>
+						</section>
+
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div id="sidebar">
+				<div class="inner">
+
+					<!-- Search -->
+					<section id="search" class="alt">
+						<form method="post" action="#">
+							<input type="text" name="query" id="query" placeholder="Search" />
+						</form>
+					</section>
+
+					<!-- Menu -->
+					<nav id="menu">
+						<header class="major">
+							<h2>Navigation</h2>
+						</header>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="portfolio.html">Portfolio</a></li>
+							<li><a href="projects.html">Projects</a></li>
+							<li>
+								<span class="opener">Blog</span>
+								<ul>
+									<li><a href="blog/index.html">All Posts</a></li>
+									<li><a href="blog/ai-ml.html">AI & Machine Learning</a></li>
+									<li><a href="blog/web-development.html">Web Development</a></li>
+									<li><a href="blog/research.html">Research & Academia</a></li>
+									<li><a href="blog/technology-trends.html">Technology Trends</a></li>
+								</ul>
+							</li>
+							<li>
+								<span class="opener">Tools & Services</span>
+								<ul>
+									<li><a href="tools/ocr.html">OCR Document Processing</a></li>
+									<li><a href="tools/webcrawler.html">Web Content Extractor</a></li>
+									<li><a href="tools/chat.html">AI Assistant</a></li>
+									<li><a href="tools/analytics.html">Analytics Dashboard</a></li>
+								</ul>
+							</li>
+							<li><a href="about.html">About Me</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</nav>
+
+					<!-- Section -->
+					<section>
+						<header class="major">
+							<h2>Recent Achievements</h2>
+						</header>
+						<div class="mini-posts">
+							<article>
+								<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+								<p>Published in Analytical Chemistry 2025 - Machine learning augmented vibrational spectroscopy</p>
+							</article>
+							<article>
+								<a href="#" class="image"><img src="images/pic08.jpg" alt="" /></a>
+								<p>Best Poster Prize at HealthTech Horizons, IIT Delhi 2024</p>
+							</article>
+							<article>
+								<a href="#" class="image"><img src="images/pic09.jpg" alt="" /></a>
+								<p>Early Doc Fellowship Award, IIT Delhi 2025</p>
+							</article>
+						</div>
+						<ul class="actions">
+							<li><a href="#publications" class="button">View All Publications</a></li>
+						</ul>
+					</section>
+
+					<!-- Contact -->
+					<section>
+						<header class="major">
+							<h2>Get in touch</h2>
+						</header>
+						<p>Interested in collaboration, research opportunities, or discussions about AI and machine learning? Feel free to reach out!</p>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="mailto:vikas.yadav@chemistry.iitd.ac.in">vikas.yadav@chemistry.iitd.ac.in</a></li>
+							<li class="icon solid fa-phone">+91-7876749665</li>
+							<li class="icon solid fa-home">MS-724, Main Building, IIT Delhi<br />
+							Hauz Khas, India, 110016</li>
+						</ul>
+					</section>
+
+					<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; Vikas Yadav. All rights reserved. <a href="https://vikasyadav.live">VikasYadav.live</a></p>
+					</footer>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+		<!-- Print Styles -->
+		<style media="print">
+			#sidebar, #header, .actions, .icons {
+				display: none !important;
+			}
+			
+			#main {
+				width: 100% !important;
+				margin: 0 !important;
+			}
+			
+			.cv-container {
+				padding: 1em !important;
+			}
+			
+			.cv-section {
+				page-break-inside: avoid;
+			}
+			
+			body {
+				font-size: 12pt !important;
+				line-height: 1.4 !important;
+			}
+		</style>
+
+	</body>
+</html>
