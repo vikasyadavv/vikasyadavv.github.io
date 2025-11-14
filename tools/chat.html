@@ -1,0 +1,1086 @@
+<!DOCTYPE HTML>
+<!--
+	Agentic AI Assistant - VikasYadav.live
+	Multi-endpoint AI chat interface for scientific queries
+-->
+<html>
+	<head>
+		<title>Agentic AI Assistant - VikasYadav.live</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Advanced AI Assistant with multiple specialized endpoints for scientific research, web search, and knowledge queries." />
+		<meta name="keywords" content="AI Assistant, Scientific Research, Wikipedia, Web Search, Grokipedia, RAG, Document Analysis" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+		
+		<style>
+			/* Chat Container Styles */
+		.chat-container {
+			display: flex;
+			flex-direction: column;
+			height: 85vh;
+			min-height: 700px;
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			overflow: visible;
+			position: relative;
+		}			/* Endpoint Selector */
+			.endpoint-selector {
+				background: #f9f9f9;
+				padding: 2em 1.5em;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1em;
+				border-bottom: 2px solid #e0e0e0;
+				position: relative;
+				overflow: visible;
+				justify-content: center;
+				align-items: center;
+				min-height: 100px;
+			}
+			
+		.endpoint-btn {
+			flex: 1;
+			min-width: 140px;
+			max-width: 180px;
+			padding: 0.75em 1.25em;
+			background: white;
+			color: #333;
+			border: 2px solid #e0e0e0;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-weight: 600;
+			font-size: 0.9em;
+			position: relative;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			overflow: visible;
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5em;
+		}			.endpoint-btn:hover {
+				border-color: #f56565;
+				color: #f56565;
+				transform: translateY(-4px);
+				box-shadow: 0 6px 16px rgba(245, 101, 101, 0.2);
+				z-index: 9999;
+			}
+			
+		/* Active endpoint - pop-up effect without color */
+		.endpoint-btn.active {
+			background: white;
+			color: #333;
+			border-color: #f56565;
+			border-width: 3px;
+			box-shadow: 0 8px 24px rgba(245, 101, 101, 0.25);
+			transform: translateY(-6px) scale(1.08);
+		}			/* Tooltip on hover */
+			.endpoint-btn::after {
+				content: attr(data-description);
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%) translateY(-10px);
+				background: #333;
+				color: white;
+				padding: 1em;
+				border-radius: 8px;
+				font-size: 0.85em;
+				font-weight: 500;
+				white-space: normal;
+				opacity: 0;
+				pointer-events: none;
+				transition: all 0.3s ease;
+				z-index: 10000;
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+				width: 200px;
+				text-align: center;
+				line-height: 1.4;
+				margin-bottom: 8px;
+			}
+			
+			.endpoint-btn::before {
+				content: '';
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%) translateY(2px);
+				border-left: 6px solid transparent;
+				border-right: 6px solid transparent;
+				border-top: 6px solid #333;
+				opacity: 0;
+				pointer-events: none;
+				transition: all 0.3s ease;
+				z-index: 10001;
+			}
+			
+			.endpoint-btn:hover::after {
+				opacity: 1;
+				transform: translateX(-50%) translateY(-12px);
+			}
+			
+			.endpoint-btn:hover::before {
+				opacity: 1;
+				transform: translateX(-50%) translateY(0px);
+			}
+		
+		.endpoint-btn i {
+			font-size: 1em;
+		}
+		
+		/* Chat Messages Area */
+		.chat-messages {
+				flex: 1;
+				overflow-y: auto;
+				padding: 2em;
+				background: linear-gradient(to bottom, #f9f9f9 0%, #ffffff 100%);
+				scroll-behavior: smooth;
+			}
+			
+			.chat-message {
+				display: flex;
+				margin-bottom: 1.5em;
+				animation: messageSlide 0.3s ease;
+				opacity: 0;
+				animation-fill-mode: forwards;
+			}
+			
+			@keyframes messageSlide {
+				from {
+					opacity: 0;
+					transform: translateY(10px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			
+			.message-avatar {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.2em;
+				margin-right: 1em;
+				flex-shrink: 0;
+			}
+			
+			.user-message .message-avatar {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+			}
+			
+			.ai-message .message-avatar {
+				background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+				color: white;
+			}
+			
+			.message-content {
+				flex: 1;
+				position: relative;
+			}
+			
+			.message-bubble {
+				background: white;
+				padding: 1em 1.25em;
+				border-radius: 12px;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+				position: relative;
+				max-width: 85%;
+			}
+			
+			.user-message .message-bubble {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				margin-left: auto;
+			}
+			
+			.ai-message .message-bubble {
+				background: white;
+				border-left: 4px solid #f56565;
+			}
+			
+			.message-timestamp {
+				font-size: 0.75em;
+				color: #999;
+				margin-top: 0.5em;
+			}
+			
+			.user-message .message-timestamp {
+				color: rgba(255,255,255,0.7);
+				text-align: right;
+			}
+			
+			.message-source {
+				display: inline-block;
+				background: #f56565;
+				color: white;
+				padding: 0.2em 0.6em;
+				border-radius: 4px;
+				font-size: 0.75em;
+				margin-top: 0.5em;
+				font-weight: 600;
+			}
+			
+			/* Typing Indicator */
+			.typing-indicator {
+				display: none;
+				padding: 1em;
+			}
+			
+			.typing-indicator.active {
+				display: block;
+			}
+			
+			.typing-dots {
+				display: inline-flex;
+				gap: 0.4em;
+			}
+			
+			.typing-dots span {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: #f56565;
+				animation: typingBounce 1.4s infinite;
+			}
+			
+			.typing-dots span:nth-child(2) {
+				animation-delay: 0.2s;
+			}
+			
+			.typing-dots span:nth-child(3) {
+				animation-delay: 0.4s;
+			}
+			
+			@keyframes typingBounce {
+				0%, 60%, 100% {
+					transform: translateY(0);
+				}
+				30% {
+					transform: translateY(-10px);
+				}
+			}
+			
+			/* Input Area */
+			.chat-input-area {
+				padding: 1.5em;
+				background: white;
+				border-top: 2px solid #f0f0f0;
+				box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+			}
+			
+			.input-wrapper {
+				display: flex;
+				gap: 1em;
+				align-items: center;
+			}
+			
+			.chat-input {
+				flex: 1;
+				padding: 1em 1.5em;
+				border: 2px solid #e0e0e0;
+				border-radius: 25px;
+				font-size: 1em;
+				transition: all 0.3s ease;
+				background: #f9f9f9;
+			}
+			
+			.chat-input:focus {
+				outline: none;
+				border-color: #f56565;
+				background: white;
+				box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.1);
+			}
+			
+			.send-btn {
+				padding: 1em 2em;
+				background: white;
+				color: #f56565;
+				border: 2px solid #f56565;
+				border-radius: 25px;
+				cursor: pointer;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				box-shadow: 0 2px 8px rgba(245, 101, 101, 0.15);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.5em;
+			}
+			
+			.send-btn:hover {
+				background: #f56565;
+				color: white;
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(245, 101, 101, 0.3);
+			}
+			
+			.send-btn:active {
+				transform: translateY(0);
+			}
+			
+			.send-btn:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				transform: none;
+			}
+			
+			/* Features Grid */
+			.features-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+				margin: 2em 0;
+			}
+			
+			.feature-card {
+				background: white;
+				padding: 2em;
+				border-radius: 12px;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+				transition: all 0.3s ease;
+				border-left: 4px solid transparent;
+			}
+			
+			.feature-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+				border-left-color: #f56565;
+			}
+			
+			.feature-icon {
+				font-size: 2.5em;
+				color: #f56565;
+				margin-bottom: 0.5em;
+			}
+			
+			.feature-card h3 {
+				color: #333;
+				margin-bottom: 0.5em;
+			}
+			
+			.feature-card p {
+				color: #666;
+				font-size: 0.95em;
+				line-height: 1.6;
+			}
+			
+			/* Welcome Screen */
+			.welcome-screen {
+				text-align: center;
+				padding: 3em 2em;
+				color: #666;
+			}
+			
+			.welcome-screen h2 {
+				color: #f56565;
+				margin-bottom: 0.5em;
+				font-size: 2em;
+			}
+			
+			.welcome-screen p {
+				font-size: 1.1em;
+				margin-bottom: 2em;
+			}
+			
+			.quick-prompts {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+				justify-content: center;
+				margin-top: 2em;
+			}
+			
+			.quick-prompt {
+				padding: 0.75em 1.5em;
+				background: #f9f9f9;
+				border: 2px solid #e0e0e0;
+				border-radius: 20px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				font-size: 0.9em;
+			}
+			
+			.quick-prompt:hover {
+				background: #f56565;
+				color: white;
+				border-color: #f56565;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
+			}
+			
+			/* Clear Chat Button */
+			.clear-chat-btn {
+				padding: 0.85em 1.5em;
+				background: white;
+				color: #999;
+				border: 2px solid #e0e0e0;
+				border-radius: 6px;
+				cursor: pointer;
+				font-size: 0.9em;
+				transition: all 0.3s ease;
+				font-weight: 600;
+				box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.clear-chat-btn:hover {
+				color: #f56565;
+				border-color: #f56565;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(245, 101, 101, 0.15);
+			}
+			
+			/* Responsive */
+			@media screen and (max-width: 736px) {
+				.endpoint-btn {
+					min-width: 100px;
+					font-size: 0.8em;
+					padding: 0.6em 1em;
+				}
+				
+				.endpoint-badge {
+					display: none;
+				}
+				
+				.chat-container {
+					height: 60vh;
+				}
+				
+				.message-bubble {
+					max-width: 95%;
+				}
+				
+				.features-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+
+					<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<ul class="icons">
+							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/vikasyadavv" class="icon brands fa-github" target="_blank" rel="noopener"><span class="label">Github</span></a></li>
+						</ul>
+					</header>
+
+					<!-- Content -->
+					<section>
+						<header class="main">
+							<h1>Agentic AI Assistant</h1>
+							<p>Intelligent multi-endpoint AI system for scientific research and knowledge queries</p>
+						</header>
+
+						<!-- Introduction -->
+						<div class="box">
+							<h2><i class="icon solid fa-robot" style="color: #f56565;"></i> About This Tool</h2>
+							<p>The Agentic AI Assistant is a sophisticated multi-endpoint chat system designed to help researchers, students, and professionals find accurate information from various sources. Each endpoint specializes in different types of queries, from scientific document analysis to real-time web search.</p>
+						</div>
+
+						<!-- Features Overview -->
+						<h2>Available Endpoints & Capabilities</h2>
+						<div class="features-grid">
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fas fa-comments"></i>
+								</div>
+								<h3>Document Search</h3>
+								<p>Query scientific documents, research papers, and technical documentation using advanced RAG (Retrieval-Augmented Generation) technology.</p>
+							</div>
+							
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fas fa-search"></i>
+								</div>
+								<h3>Web Search</h3>
+								<p>Real-time internet search with AI-powered summarization. Get the latest information from across the web with intelligent filtering.</p>
+							</div>
+							
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fab fa-wikipedia-w"></i>
+								</div>
+								<h3>Wikipedia</h3>
+								<p>Direct access to Wikipedia's vast knowledge base with enhanced AI processing for quick facts and comprehensive summaries.</p>
+							</div>
+							
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fas fa-brain"></i>
+								</div>
+								<h3>Grokipedia</h3>
+								<p>Advanced AI reasoning system combining multiple knowledge sources for deep insights and complex query resolution.</p>
+							</div>
+							
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fas fa-book-open"></i>
+								</div>
+								<h3>Scientific AI</h3>
+								<p>Specialized in chemistry, physics, biology, and materials science queries with technical accuracy and citation support.</p>
+							</div>
+							
+							<div class="feature-card">
+								<div class="feature-icon">
+									<i class="fas fa-code"></i>
+								</div>
+								<h3>Code Assistant</h3>
+								<p>Programming help, code analysis, debugging support, and technical documentation assistance across multiple languages.</p>
+							</div>
+						</div>
+
+						<!-- Chat Interface -->
+						<h2 style="margin-top: 3em;">Start Chatting</h2>
+						<div class="chat-container">
+							<!-- Endpoint Selector -->
+							<div class="endpoint-selector">
+								<button class="endpoint-btn active" data-endpoint="chat" data-description="General conversation and queries with AI assistant"><i class="fas fa-comments"></i> Chat</button>
+								<button class="endpoint-btn" data-endpoint="websearch" data-description="Real-time internet search with AI-powered summarization"><i class="fas fa-search"></i> Web Search</button>
+								<button class="endpoint-btn" data-endpoint="wikipedia" data-description="Access Wikipedia's knowledge base with AI enhancement"><i class="fab fa-wikipedia-w"></i> Wikipedia</button>
+								<button class="endpoint-btn" data-endpoint="grokipedia" data-description="Deep reasoning combining multiple knowledge sources for comprehensive insights"><i class="fas fa-brain"></i> Grokipedia</button>
+								<button class="endpoint-btn" data-endpoint="literature" data-description="Specialized in scientific literature and research papers with expert-level accuracy"><i class="fas fa-book-open"></i> Literature</button>
+								<button class="endpoint-btn" data-endpoint="code" data-description="Programming help, code analysis, and debugging support across multiple languages"><i class="fas fa-code"></i> Code</button>
+								<button class="clear-chat-btn" id="clear-chat">
+									<i class="fas fa-trash-alt"></i> Clear
+								</button>
+							</div>
+
+							<!-- Messages Area -->
+							<div class="chat-messages" id="chat-messages">
+								<!-- Welcome Screen -->
+								<div class="welcome-screen" id="welcome-screen">
+									<h2>👋 Welcome to Agentic AI Assistant</h2>
+									<p>Select an endpoint above and start asking questions. I can help you with research, coding, fact-checking, and much more!</p>
+									
+									<h3>Try these sample queries:</h3>
+									<div class="quick-prompts">
+										<div class="quick-prompt" data-prompt="Explain quantum entanglement in simple terms">
+											🔬 Quantum entanglement
+										</div>
+										<div class="quick-prompt" data-prompt="What are the latest developments in AI?">
+											🤖 Latest AI developments
+										</div>
+										<div class="quick-prompt" data-prompt="Write a Python function to calculate Fibonacci sequence">
+											💻 Python Fibonacci
+										</div>
+										<div class="quick-prompt" data-prompt="Summarize the history of machine learning">
+											📚 ML history
+										</div>
+										<div class="quick-prompt" data-prompt="What is CRISPR and how does it work?">
+											🧬 CRISPR technology
+										</div>
+									</div>
+								</div>
+
+								<!-- Typing Indicator -->
+								<div class="typing-indicator" id="typing-indicator">
+									<div class="chat-message ai-message">
+										<div class="message-avatar">
+											<i class="fas fa-robot"></i>
+										</div>
+										<div class="message-content">
+											<div class="message-bubble">
+												<div class="typing-dots">
+													<span></span>
+													<span></span>
+													<span></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Input Area -->
+							<div class="chat-input-area">
+								<div class="input-wrapper">
+									<input 
+										type="text" 
+										class="chat-input" 
+										id="chat-input" 
+										placeholder="Ask me anything... (Press Enter to send)"
+										autocomplete="off"
+									/>
+									<button class="send-btn" id="send-btn">
+										<i class="fas fa-paper-plane"></i> Send
+									</button>
+								</div>
+								<div style="margin-top: 0.75em; font-size: 0.85em; color: #999;">
+									<i class="fas fa-info-circle"></i> 
+									Current endpoint: <strong id="current-endpoint-name">Chat</strong>
+								</div>
+							</div>
+						</div>
+
+						<!-- Usage Tips -->
+						<div class="box" style="margin-top: 3em;">
+							<h2><i class="icon solid fa-lightbulb" style="color: #f56565;"></i> Tips for Best Results</h2>
+							<ul>
+								<li><strong>Be specific:</strong> Detailed questions yield better answers. Instead of "AI", try "What are transformer models in natural language processing?"</li>
+								<li><strong>Choose the right endpoint:</strong> Use Documents for uploaded research, Web Search for current events, Wikipedia for facts, and Grokipedia for deep analysis.</li>
+								<li><strong>Follow-up questions:</strong> The AI maintains context within a session, so you can ask follow-up questions naturally.</li>
+								<li><strong>Scientific queries:</strong> For technical questions, use the Scientific endpoint which understands domain-specific terminology.</li>
+								<li><strong>Code assistance:</strong> The Code endpoint can help with debugging, explanations, and writing new code across multiple languages.</li>
+							</ul>
+						</div>
+
+					</section>
+
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div id="sidebar">
+				<div class="inner">
+
+					<!-- Search -->
+					<section id="search" class="alt">
+						<form method="post" action="#">
+							<input type="text" name="query" id="query" placeholder="Search site..." />
+						</form>
+					</section>
+
+					<!-- Menu -->
+					<nav id="menu">
+						<header class="major">
+							<h2>Navigation</h2>
+						</header>
+						<ul>
+							<li><a href="../index.html">Home</a></li>
+							<li><a href="../portfolio.html">Portfolio</a></li>
+							<li><a href="../projects.html">Projects</a></li>
+							<li>
+								<span class="opener">Blog</span>
+								<ul>
+									<li><a href="../blog/index.html">All Posts</a></li>
+									<li><a href="../blog/ai-ml.html">AI & Machine Learning</a></li>
+									<li><a href="../blog/web-development.html">Web Development</a></li>
+									<li><a href="../blog/research.html">Research & Academia</a></li>
+									<li><a href="../blog/technology-trends.html">Technology Trends</a></li>
+								</ul>
+							</li>
+							<li>
+								<span class="opener">Tools & Services</span>
+								<ul>
+									<li><a href="ocr.html">OCR Document Processing</a></li>
+									<li><a href="webcrawler.html">Web Content Extractor</a></li>
+									<li><a href="chat.html">Agentic AI Assistant</a></li>
+									<li><a href="analytics.html">Analytics Dashboard</a></li>
+								</ul>
+							</li>
+							<li><a href="../about.html">About Me</a></li>
+							<li><a href="../contact.html">Contact</a></li>
+						</ul>
+					</nav>
+
+					<!-- Featured Content -->
+					<section>
+						<header class="major">
+							<h2>Featured</h2>
+						</header>
+						<div class="mini-posts">
+							<article>
+								<a href="../blog/quantum-computing.html" class="image"><img src="../images/quantum.jpg" alt="Quantum Computing" /></a>
+								<p><strong>Quantum Computing Fundamentals:</strong> Understanding the principles and potential applications of quantum computing in modern technology.</p>
+							</article>
+							<article>
+								<a href="../projects/blockchain-voting.html" class="image"><img src="../images/blockchain.jpg" alt="Blockchain Voting" /></a>
+								<p><strong>Secure Voting System:</strong> Blockchain-based voting platform ensuring transparency and security in democratic processes.</p>
+							</article>
+							<article>
+								<a href="../blog/edge-computing.html" class="image"><img src="../images/edge-computing.jpg" alt="Edge Computing" /></a>
+								<p><strong>Edge Computing Revolution:</strong> How edge computing is transforming data processing and enabling real-time applications.</p>
+							</article>
+						</div>
+						<ul class="actions">
+							<li><a href="../blog/index.html" class="button">View All Posts</a></li>
+						</ul>
+					</section>
+
+					<!-- Contact Info -->
+					<section>
+						<header class="major">
+							<h2>Get in Touch</h2>
+						</header>
+						<p>Open for collaboration, research opportunities, and interesting projects. Let's build something amazing together!</p>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="mailto:info@vikasyadav.live">info@vikasyadav.live</a></li>
+							<li class="icon brands fa-telegram-plane"><a href="https://t.me/cheminations" target="_blank" rel="noopener">@cheminations</a></li>
+							<li class="icon solid fa-home">Ateli Mandi<br />
+							Haryana, India 123021</li>
+						</ul>
+					</section>
+
+					<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 2025 Cheminations. All rights reserved. 
+						<br />Built with security and performance in mind.
+						<br />Design inspired by <a href="https://html5up.net" target="_blank" rel="noopener">HTML5 UP</a>.</p>
+					</footer>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
+		
+		<script>
+			// Agentic AI Assistant JavaScript
+			(function() {
+				'use strict';
+
+				// State
+				let currentEndpoint = 'chat';
+				let conversationHistory = [];
+				let sessionId = 'agentic_ai_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+				// Endpoint configurations
+				const endpoints = {
+					chat: {
+						name: 'Chat',
+						description: 'General conversation and queries with AI assistant.',
+						speed: '~2-3s',
+						accuracy: 'High',
+						use: 'General queries',
+						apiUrl: '/api/chat'
+					},
+					websearch: {
+						name: 'Web Search',
+						description: 'Real-time internet search with AI-powered summarization.',
+						speed: '~3-5s',
+						accuracy: 'Very High',
+						use: 'Current events',
+						apiUrl: '/api/websearch'
+					},
+					wikipedia: {
+						name: 'Wikipedia',
+						description: 'Access Wikipedia\'s knowledge base with AI enhancement.',
+						speed: '~1-2s',
+						accuracy: 'High',
+						use: 'Facts & definitions',
+						apiUrl: '/api/wikipedia'
+					},
+					grokipedia: {
+						name: 'Grokipedia',
+						description: 'Deep reasoning combining multiple knowledge sources.',
+						speed: '~4-6s',
+						accuracy: 'Very High',
+						use: 'Complex analysis',
+						apiUrl: '/api/grokipedia'
+					},
+					literature: {
+						name: 'Literature',
+						description: 'Specialized in scientific literature and research papers.',
+						speed: '~2-4s',
+						accuracy: 'Expert',
+						use: 'Scientific literature',
+						apiUrl: '/api/literature'
+					},
+					code: {
+						name: 'Code Assistant',
+						description: 'Programming help and code analysis.',
+						speed: '~2-3s',
+						accuracy: 'High',
+						use: 'Coding tasks',
+						apiUrl: '/api/code'
+					}
+				};
+
+			// DOM Elements
+			const chatMessages = document.getElementById('chat-messages');
+			const chatInput = document.getElementById('chat-input');
+			const sendBtn = document.getElementById('send-btn');
+			const welcomeScreen = document.getElementById('welcome-screen');
+			const currentEndpointName = document.getElementById('current-endpoint-name');
+			const clearChatBtn = document.getElementById('clear-chat');
+
+			// Initialize
+				function init() {
+					// Endpoint button listeners
+					document.querySelectorAll('.endpoint-btn').forEach(btn => {
+						btn.addEventListener('click', function() {
+							switchEndpoint(this.dataset.endpoint);
+						});
+					});
+
+					// Send button listener
+					sendBtn.addEventListener('click', sendMessage);
+
+					// Enter key listener
+					chatInput.addEventListener('keypress', function(e) {
+						if (e.key === 'Enter') {
+							sendMessage();
+						}
+					});
+
+					// Quick prompts
+					document.querySelectorAll('.quick-prompt').forEach(prompt => {
+						prompt.addEventListener('click', function() {
+							chatInput.value = this.dataset.prompt;
+							sendMessage();
+						});
+					});
+
+					// Clear chat
+					clearChatBtn.addEventListener('click', clearChat);
+
+					console.log('✅ Agentic AI Assistant initialized');
+				}
+
+				// Switch endpoint
+				function switchEndpoint(endpoint) {
+					currentEndpoint = endpoint;
+					
+					// Update UI
+					document.querySelectorAll('.endpoint-btn').forEach(btn => {
+						btn.classList.remove('active');
+					});
+					document.querySelector(`[data-endpoint="${endpoint}"]`).classList.add('active');
+
+					// Update endpoint info
+					const config = endpoints[endpoint];
+					currentEndpointName.textContent = `${config.name}`;
+
+					console.log(`🔄 Switched to endpoint: ${endpoint}`);
+				}
+
+			// Send message
+			async function sendMessage() {
+				const message = chatInput.value.trim();
+				
+				if (!message) return;
+
+				// Disable input during processing
+				chatInput.disabled = true;
+				sendBtn.disabled = true;
+				sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+				// Hide welcome screen on first message
+				if (welcomeScreen) {
+					welcomeScreen.style.display = 'none';
+				}
+
+				// Add user message
+				addMessage(message, 'user');
+
+				// Clear input
+				chatInput.value = '';
+
+				// Show typing indicator
+				showTyping();
+
+				// Send to API based on endpoint
+				try {
+					console.log(`🚀 Initiating API call for endpoint: ${currentEndpoint}`);
+					const response = await sendToAPI(message);
+					hideTyping();
+					addMessage(response, 'ai');
+					console.log('✅ Message sent and response received successfully');
+				} catch (error) {
+					hideTyping();
+					addMessage('I\'m having trouble connecting right now. Please try again in a moment.', 'ai');
+					console.error('❌ API Error:', error);
+					console.error('Error details:', error.message);
+				} finally {
+					// Re-enable input
+					chatInput.disabled = false;
+					sendBtn.disabled = false;
+					sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+					chatInput.focus();
+				}					// Store in history
+					conversationHistory.push({
+						role: 'user',
+						content: message,
+						endpoint: currentEndpoint,
+						timestamp: new Date()
+					});
+				}
+
+			// Send message to API
+			async function sendToAPI(userMessage) {
+				const apiUrl = 'https://vikasyadav-api.vikas4770.workers.dev';
+				
+				// Format message based on endpoint
+				let formattedMessage = userMessage;
+				
+				if (currentEndpoint === 'chat') {
+					formattedMessage = `/chat ${userMessage}`;
+				} else if (currentEndpoint === 'websearch') {
+					formattedMessage = `/search ${userMessage}`;
+				} else if (currentEndpoint === 'wikipedia') {
+					formattedMessage = `/wikipedia ${userMessage}`;
+				} else if (currentEndpoint === 'grokipedia') {
+					formattedMessage = `/grokipedia ${userMessage}`;
+				} else if (currentEndpoint === 'literature') {
+					formattedMessage = `/literature ${userMessage}`;
+				} else if (currentEndpoint === 'code') {
+					formattedMessage = `/code ${userMessage}`;
+				}
+
+				console.log(`📤 Sending to ${currentEndpoint}:`, formattedMessage);
+				console.log(`📍 API URL: ${apiUrl}/api/chat/message`);
+
+				const response = await fetch(`${apiUrl}/api/chat/message`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						message: formattedMessage,
+						sessionId: sessionId,
+						context: {
+							page: 'agentic-ai-assistant',
+							endpoint: currentEndpoint,
+							timestamp: new Date().toISOString()
+						}
+					})
+				});
+
+				console.log(`📥 Response status: ${response.status}`);
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+
+				const data = await response.json();
+				console.log('📦 Response data:', data);
+				
+				// Extract response text - matching chat.js pattern
+				if (data.success && data.response) {
+					return data.response;
+				} else if (data.response) {
+					return data.response;
+				} else if (data.message) {
+					return data.message;
+				} else if (typeof data === 'string') {
+					return data;
+				} else {
+					return 'Received response from API';
+				}
+			}				// Add message to chat
+				function addMessage(content, type) {
+					const messageDiv = document.createElement('div');
+					messageDiv.className = `chat-message ${type}-message`;
+					
+					const timestamp = new Date().toLocaleTimeString('en-US', { 
+						hour: '2-digit', 
+						minute: '2-digit' 
+					});
+
+					const avatarIcon = type === 'user' ? 'fa-user' : 'fa-robot';
+					const endpointBadge = type === 'ai' ? 
+						`<span class="message-source">${endpoints[currentEndpoint].name}</span>` : '';
+
+					messageDiv.innerHTML = `
+						<div class="message-avatar">
+							<i class="fas ${avatarIcon}"></i>
+						</div>
+						<div class="message-content">
+							<div class="message-bubble">
+								${content}
+							</div>
+							<div class="message-timestamp">
+								${timestamp}
+								${endpointBadge}
+							</div>
+						</div>
+					`;
+
+					chatMessages.appendChild(messageDiv);
+					chatMessages.scrollTop = chatMessages.scrollHeight;
+
+					if (type === 'ai') {
+						conversationHistory.push({
+							role: 'assistant',
+							content: content,
+							endpoint: currentEndpoint,
+							timestamp: new Date()
+						});
+					}
+				}
+
+			// Show typing indicator
+			function showTyping() {
+				// Remove existing typing indicator if any
+				const existing = document.getElementById('typing-indicator');
+				if (existing) existing.remove();
+				
+				// Create and append typing indicator
+				const typingDiv = document.createElement('div');
+				typingDiv.id = 'typing-indicator';
+				typingDiv.className = 'typing-indicator active';
+				typingDiv.innerHTML = `
+					<div class="chat-message ai-message">
+						<div class="message-avatar">
+							<i class="fas fa-robot"></i>
+						</div>
+						<div class="message-content">
+							<div class="message-bubble">
+								<div class="typing-dots">
+									<span></span>
+									<span></span>
+									<span></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				`;
+				chatMessages.appendChild(typingDiv);
+				chatMessages.scrollTop = chatMessages.scrollHeight;
+			}
+
+			// Hide typing indicator
+			function hideTyping() {
+				const typingIndicator = document.getElementById('typing-indicator');
+				if (typingIndicator) {
+					typingIndicator.remove();
+				}
+			}				// Clear chat
+				function clearChat() {
+					if (confirm('Clear all messages? This cannot be undone.')) {
+						conversationHistory = [];
+						chatMessages.innerHTML = `
+							<div class="welcome-screen" id="welcome-screen">
+								<h2>👋 Chat Cleared</h2>
+								<p>Start a new conversation by typing your question below.</p>
+							</div>
+						`;
+						console.log('🗑️ Chat cleared');
+					}
+				}
+
+				// Initialize on load
+				init();
+
+			})();
+		</script>
+
+	</body>
+</html>
