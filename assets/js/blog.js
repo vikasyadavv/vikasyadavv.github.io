@@ -409,7 +409,12 @@
 		 */
 		renderHomepagePosts: function(posts) {
 			const container = document.getElementById('latest-posts');
-			if (!container) return;
+			if (!container) {
+				console.warn('Homepage posts container (#latest-posts) not found');
+				return;
+			}
+			
+			console.log(`Rendering homepage posts: ${posts.length} total posts available`);
 			
 			// Get rotation index from localStorage
 			let rotationIndex = parseInt(localStorage.getItem('blog_rotation_index') || '0');
@@ -421,6 +426,7 @@
 				rotationIndex = (rotationIndex + 6) % posts.length;
 				localStorage.setItem('blog_rotation_index', rotationIndex.toString());
 				localStorage.setItem('blog_last_rotation', now.toString());
+				console.log(`Posts rotated. New rotation index: ${rotationIndex}`);
 			}
 			
 			// Get 6 posts starting from rotation index
@@ -428,6 +434,8 @@
 			for (let i = 0; i < Math.min(6, posts.length); i++) {
 				displayPosts.push(posts[(rotationIndex + i) % posts.length]);
 			}
+			
+			console.log(`Displaying ${displayPosts.length} posts on homepage`);
 			
 			// Render posts
 			const postsHTML = displayPosts.map((post, index) => {
@@ -455,31 +463,83 @@
 			}).join('');
 			
 			container.innerHTML = postsHTML;
+			console.log('✅ Homepage posts rendered successfully');
 		}
 	};
 
 	// Main Blog Loader
 	const BlogLoader = {
 		init: async function() {
+			console.log('🚀 BlogLoader initializing...');
+			
 			try {
+				// Check if we're on a page with blog content
+				const blogContainer = document.getElementById('blog-posts-grid');
+				const homepageContainer = document.getElementById('latest-posts');
+				
+				console.log('Container check:', {
+					blogContainer: !!blogContainer,
+					homepageContainer: !!homepageContainer
+				});
+				
+				// If neither container exists, skip initialization
+				if (!blogContainer && !homepageContainer) {
+					console.log('⏭️  No blog containers found, skipping initialization');
+					return;
+				}
+				
+				console.log('📡 Fetching posts from API...');
 				// Fetch posts from API
 				const allPosts = await api.fetchPosts();
+				console.log(`✅ Fetched ${allPosts.length} total posts`);
 				
 				// Filter valid posts
 				const validPosts = api.filterPosts(allPosts);
+				console.log(`✅ Filtered to ${validPosts.length} valid posts (status: ready/posted)`);
 				
-				// Determine if we're on blog page or homepage
-				const isBlogPage = window.location.pathname.includes('/blog/');
+				if (validPosts.length === 0) {
+					console.warn('⚠️  No valid posts found');
+					if (homepageContainer) {
+						homepageContainer.innerHTML = `
+							<article style="grid-column: 1 / -1; text-align: center; padding: 3em;">
+								<p style="color: #999;">No blog posts available at this time. Check back soon!</p>
+							</article>
+						`;
+					}
+					return;
+				}
 				
-				if (isBlogPage) {
+				// Render to appropriate container
+				if (blogContainer) {
+					// We're on the blog page
+					console.log('📄 Rendering to blog page');
 					ui.renderPosts(validPosts);
-				} else {
+				} else if (homepageContainer) {
+					// We're on the homepage
+					console.log('🏠 Rendering to homepage');
 					ui.renderHomepagePosts(validPosts);
 				}
 				
 			} catch (error) {
-				console.error('Error initializing blog:', error);
-				ui.showError('Unable to load blog posts. Please try again later.');
+				console.error('❌ Error initializing blog:', error);
+				
+				// Show error message on homepage
+				const homepageContainer = document.getElementById('latest-posts');
+				if (homepageContainer) {
+					homepageContainer.innerHTML = `
+						<article style="grid-column: 1 / -1; text-align: center; padding: 3em;">
+							<p style="color: #e53e3e;">
+								<i class="fas fa-exclamation-triangle" style="margin-right: 0.5em;"></i>
+								Unable to load blog posts. Please try again later.
+							</p>
+						</article>
+					`;
+				}
+				
+				// Show error on blog page
+				if (document.getElementById('blog-posts-grid')) {
+					ui.showError('Unable to load blog posts. Please try again later.');
+				}
 			}
 		}
 	};
