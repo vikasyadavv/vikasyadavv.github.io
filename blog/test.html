@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #f56565;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        .post-card {
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .post-card h3 {
+            margin-top: 0;
+            color: #f56565;
+        }
+        .post-image {
+            max-width: 200px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #e53e3e;
+        }
+        pre {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-posted {
+            background: #48bb78;
+            color: white;
+        }
+        .badge-review {
+            background: #ed8936;
+            color: white;
+        }
+        .badge-ready {
+            background: #4299e1;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Blog API Test</h1>
+        <p>Testing connection to: <code>https://vikasyadav-blog-post.vikas4770.workers.dev</code></p>
+        
+        <button onclick="testAPI()">Test API Connection</button>
+        <button onclick="testImageConversion()">Test Image Conversion</button>
+        <button onclick="clearCache()">Clear localStorage</button>
+        
+        <div id="status"></div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://vikasyadav-blog-post.vikas4770.workers.dev';
+
+        async function testAPI() {
+            const statusEl = document.getElementById('status');
+            const resultsEl = document.getElementById('results');
+            
+            statusEl.innerHTML = '<div class="status info">🔄 Fetching data from API...</div>';
+            resultsEl.innerHTML = '';
+
+            try {
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                statusEl.innerHTML = '<div class="status success">✅ API Connection Successful!</div>';
+                
+                // Display summary
+                let summary = `
+                    <h2>📊 Summary</h2>
+                    <p><strong>Total Posts:</strong> ${data.posts.length}</p>
+                    <p><strong>API Success:</strong> ${data.success}</p>
+                `;
+
+                // Filter valid posts
+                const validPosts = data.posts.filter(post => {
+                    const status = (post.status || '').toLowerCase().trim();
+                    return (status === 'ready' || status === 'posted') && post.idea && post.idea.trim();
+                });
+
+                summary += `
+                    <p><strong>Valid Posts (ready/posted):</strong> ${validPosts.length}</p>
+                `;
+
+                // Count by status
+                const statusCount = {};
+                data.posts.forEach(post => {
+                    const status = (post.status || 'unknown').toLowerCase().trim();
+                    statusCount[status] = (statusCount[status] || 0) + 1;
+                });
+
+                summary += '<h3>Posts by Status:</h3><ul>';
+                Object.entries(statusCount).forEach(([status, count]) => {
+                    summary += `<li><strong>${status}:</strong> ${count}</li>`;
+                });
+                summary += '</ul>';
+
+                resultsEl.innerHTML = summary;
+
+                // Display valid posts
+                if (validPosts.length > 0) {
+                    resultsEl.innerHTML += '<h2>📝 Valid Posts (will be shown on website)</h2>';
+                    
+                    validPosts.forEach((post, index) => {
+                        const title = getTitle(post);
+                        const image = getPostImage(post);
+                        const excerpt = getExcerpt(post.idea);
+                        const status = post.status.toLowerCase();
+                        const badgeClass = status === 'posted' ? 'badge-posted' : 'badge-ready';
+                        
+                        resultsEl.innerHTML += `
+                            <div class="post-card">
+                                <h3>${index + 1}. ${title}</h3>
+                                <span class="badge ${badgeClass}">${status}</span>
+                                <p><strong>Excerpt:</strong> ${excerpt}</p>
+                                <p><strong>Image URL:</strong> <code>${image}</code></p>
+                                <img src="${image}" class="post-image" alt="${title}" 
+                                     onerror="this.src='../images/default-blog.jpg';" />
+                                <details>
+                                    <summary>View Full Content</summary>
+                                    <pre>${post.idea.substring(0, 500)}${post.idea.length > 500 ? '...' : ''}</pre>
+                                </details>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Display raw response
+                resultsEl.innerHTML += `
+                    <h2>🔍 Raw API Response</h2>
+                    <pre>${JSON.stringify(data, null, 2).substring(0, 2000)}...</pre>
+                `;
+
+            } catch (error) {
+                statusEl.innerHTML = `
+                    <div class="status error">
+                        ❌ Error: ${error.message}
+                        <br><br>
+                        <strong>Possible issues:</strong>
+                        <ul>
+                            <li>Check if the API URL is correct</li>
+                            <li>Verify CORS settings on Cloudflare Workers</li>
+                            <li>Check network connectivity</li>
+                            <li>Ensure the API is deployed and running</li>
+                        </ul>
+                    </div>
+                `;
+                console.error('API Test Error:', error);
+            }
+        }
+
+        function testImageConversion() {
+            const resultsEl = document.getElementById('results');
+            
+            const testUrls = [
+                'https://drive.google.com/file/d/1ytDtWhw5h2aQTyQGm5bmJez2qQeL18v3/view?usp=sharing',
+                'https://drive.google.com/file/d/1MtxqQmZ-hkSnNPEb48Bzgkilj7SflOUP/view?usp=sharing',
+                'https://drive.google.com/open?id=1234567890abcdef',
+                'https://example.com/image.jpg'
+            ];
+
+            let html = '<h2>🖼️ Image URL Conversion Test</h2>';
+            
+            testUrls.forEach(url => {
+                const converted = convertDriveUrl(url);
+                html += `
+                    <div class="post-card">
+                        <p><strong>Original:</strong><br><code>${url}</code></p>
+                        <p><strong>Converted:</strong><br><code>${converted}</code></p>
+                        <img src="${converted}" class="post-image" alt="Test" 
+                             onerror="this.style.border='2px solid red';" />
+                    </div>
+                `;
+            });
+
+            resultsEl.innerHTML = html;
+        }
+
+        function clearCache() {
+            const count = Object.keys(localStorage).filter(key => key.startsWith('blog_')).length;
+            
+            Object.keys(localStorage)
+                .filter(key => key.startsWith('blog_'))
+                .forEach(key => localStorage.removeItem(key));
+            
+            document.getElementById('status').innerHTML = `
+                <div class="status success">
+                    ✅ Cleared ${count} blog-related items from localStorage
+                </div>
+            `;
+        }
+
+        // Utility functions (same as blog.js)
+        function convertDriveUrl(url) {
+            if (!url || url.trim() === '') return null;
+            
+            url = url.trim();
+            
+            // If already a direct URL, return it
+            if (url.includes('drive.google.com/uc?') || url.includes('drive.google.com/thumbnail?')) {
+                return url;
+            }
+            
+            const patterns = [
+                /\/file\/d\/([a-zA-Z0-9_-]+)/,
+                /\/d\/([a-zA-Z0-9_-]+)\/view/,
+                /id=([a-zA-Z0-9_-]+)/,
+                /\/open\?id=([a-zA-Z0-9_-]+)/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) {
+                    // Use thumbnail format for better loading
+                    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+                }
+            }
+            
+            // If it's a regular image URL (not Google Drive), return as is
+            if (url.startsWith('http')) {
+                return url;
+            }
+            
+            return null;
+        }
+
+        function getPostImage(post) {
+            const finalImage = post.Final_Image ? post.Final_Image.trim() : '';
+            
+            // Check if Final_Image contains a direct URL
+            if (finalImage && finalImage.startsWith('http')) {
+                const convertedUrl = convertDriveUrl(finalImage);
+                if (convertedUrl) return convertedUrl;
+            }
+            
+            // Extract image number from Final_Image
+            if (finalImage) {
+                const imageMatch = finalImage.toLowerCase().match(/image(\d+)/);
+                if (imageMatch) {
+                    const imageNum = imageMatch[1];
+                    const imageUrl = post[`image${imageNum}`];
+                    if (imageUrl && imageUrl.trim()) {
+                        const convertedUrl = convertDriveUrl(imageUrl);
+                        if (convertedUrl) return convertedUrl;
+                    }
+                }
+            }
+            
+            // Fallback to first available image
+            for (let i = 1; i <= 4; i++) {
+                const imgUrl = post[`image${i}`];
+                if (imgUrl && imgUrl.trim()) {
+                    const convertedUrl = convertDriveUrl(imgUrl);
+                    if (convertedUrl) return convertedUrl;
+                }
+            }
+            
+            return '../images/default-blog.jpg';
+        }
+
+        function getTitle(post) {
+            if (post.name && post.name.trim() && post.name.length < 200) {
+                return post.name.trim();
+            }
+            
+            if (post.idea) {
+                const firstLine = post.idea.split('\n')[0].trim();
+                if (firstLine.length > 0 && firstLine.length < 200) {
+                    return firstLine;
+                }
+            }
+            
+            return 'Untitled Post';
+        }
+
+        function getExcerpt(idea) {
+            if (!idea) return '';
+            
+            const paragraphs = idea.split(/\n\n+/);
+            const contentStart = paragraphs.length > 1 ? 1 : 0;
+            const excerpt = paragraphs[contentStart] || paragraphs[0] || '';
+            
+            if (excerpt.length > 200) {
+                return excerpt.substring(0, 200).trim() + '...';
+            }
+            
+            return excerpt.trim();
+        }
+
+        // Auto-run test on page load
+        window.addEventListener('load', testAPI);
+    </script>
+</body>
+</html>

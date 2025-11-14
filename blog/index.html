@@ -1,0 +1,435 @@
+<!DOCTYPE HTML>
+<!--
+	VikasYadav.live - Blog
+	Dynamic blog posts from Google Sheets via Cloudflare Workers
+-->
+<html>
+	<head>
+		<title>Blog - Vikas Yadav</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Insights on AI, Machine Learning, Technology, and Innovation by Vikas Yadav" />
+		<meta name="keywords" content="AI, Machine Learning, Blog, Technology, Innovation, Research" />
+		<meta name="author" content="Vikas Yadav" />
+		
+		<!-- Open Graph Meta Tags -->
+		<meta property="og:title" content="Blog - Vikas Yadav" />
+		<meta property="og:description" content="Insights on AI, Machine Learning, Technology, and Innovation" />
+		<meta property="og:url" content="https://vikasyadavv.github.io/blog/index.html" />
+		<meta property="og:type" content="website" />
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		
+		<style>
+			/* Blog Posts Grid */
+			#blog-posts-grid {
+				display: flex;
+				flex-wrap: wrap;
+				margin: 0 0 2em -4em;
+				width: calc(100% + 4em);
+			}
+			
+			.blog-post-card {
+				flex-grow: 0;
+				flex-shrink: 1;
+				margin: 0 0 4em 4em;
+				position: relative;
+				width: calc(33.33333% - 4em);
+			}
+			
+			.blog-post-card:before {
+				background: rgba(210, 215, 217, 0.75);
+				content: '';
+				display: block;
+				height: calc(100% + 4em);
+				left: -2em;
+				position: absolute;
+				top: 0;
+				width: 1px;
+			}
+			
+			.blog-post-card:after {
+				background: rgba(210, 215, 217, 0.75);
+				bottom: -2em;
+				content: '';
+				display: block;
+				height: 1px;
+				position: absolute;
+				right: 0;
+				width: calc(100% + 4em);
+			}
+			
+			/* Remove borders for appropriate items */
+			.blog-post-card:nth-child(3n + 1):before {
+				display: none;
+			}
+			
+			.blog-post-card:nth-child(3n + 1):after {
+				width: 100%;
+			}
+			
+			.blog-post-image-wrapper {
+				position: relative;
+				display: block;
+				overflow: hidden;
+				margin: 0 0 2em 0;
+			}
+			
+			.blog-post-image {
+				display: block;
+				width: 100%;
+				height: auto;
+				transition: transform 0.2s ease;
+			}
+			
+			.blog-post-image-wrapper:hover .blog-post-image {
+				transform: scale(1.075);
+			}
+			
+			.blog-post-content {
+				position: relative;
+			}
+			
+			.blog-post-content > :last-child {
+				margin-bottom: 0;
+			}
+			
+			.blog-post-title {
+				font-size: 1.25em;
+				font-weight: 600;
+				line-height: 1.5;
+				margin: 0 0 1em 0;
+			}
+			
+			.blog-post-title a {
+				color: inherit;
+				text-decoration: none;
+				border-bottom: 0;
+			}
+			
+			.blog-post-excerpt {
+				color: #7f888f;
+				margin-bottom: 1.5em;
+				line-height: 1.65;
+			}
+			
+			.blog-status {
+				position: absolute;
+				top: 1em;
+				right: 1em;
+				display: inline-block;
+				padding: 0.4em 0.9em;
+				border-radius: 20px;
+				font-size: 0.75em;
+				font-weight: bold;
+				text-transform: uppercase;
+				z-index: 10;
+			}
+			
+			.status-posted {
+				background: #48bb78;
+				color: white;
+				box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+			}
+			
+			.status-review {
+				background: #ed8936;
+				color: white;
+				box-shadow: 0 2px 8px rgba(237, 137, 54, 0.3);
+			}
+			
+			.loading-spinner {
+				text-align: center;
+				padding: 3em;
+			}
+			
+			.spinner {
+				border: 4px solid #f3f3f3;
+				border-top: 4px solid #f56565;
+				border-radius: 50%;
+				width: 50px;
+				height: 50px;
+				animation: spin 1s linear infinite;
+				margin: 0 auto;
+			}
+			
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+			
+			.error-message {
+				background: #fed7d7;
+				color: #c53030;
+				padding: 1.5em;
+				border-radius: 8px;
+				margin: 2em 0;
+			}
+			
+			.no-posts {
+				text-align: center;
+				padding: 3em;
+				color: #999;
+			}
+			
+			/* Pagination styling */
+			#pagination-section {
+				margin-top: 3em;
+				padding-top: 2em;
+				border-top: 1px solid rgba(210, 215, 217, 0.75);
+			}
+			
+			.pagination {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				list-style: none;
+				padding: 0;
+				gap: 0.5em;
+				flex-wrap: wrap;
+			}
+			
+			.pagination li {
+				margin: 0;
+			}
+			
+			.pagination a,
+			.pagination span {
+				padding: 0.5em 1em;
+				border-radius: 5px;
+				transition: all 0.3s ease;
+			}
+			
+			.pagination a.page {
+				background: #fff;
+				color: #333;
+				border: 1px solid rgba(210, 215, 217, 0.75);
+				text-decoration: none;
+				min-width: 40px;
+				text-align: center;
+			}
+			
+			.pagination a.page:hover {
+				background: #f56565;
+				color: white;
+				border-color: #f56565;
+			}
+			
+			.pagination a.page.active {
+				background: #f56565;
+				color: white;
+				border-color: #f56565;
+				font-weight: bold;
+			}
+			
+			.pagination .button.disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				background: #e2e8f0;
+			}
+			
+			/* Responsive - Two columns on medium screens */
+			@media screen and (max-width: 1680px) {
+				.blog-post-card {
+					width: calc(50% - 4em);
+				}
+				
+				.blog-post-card:nth-child(3n + 1):before {
+					display: block;
+				}
+				
+				.blog-post-card:nth-child(3n + 1):after {
+					width: calc(100% + 4em);
+				}
+				
+				.blog-post-card:nth-child(2n + 1):before {
+					display: none;
+				}
+				
+				.blog-post-card:nth-child(2n + 1):after {
+					width: 100%;
+				}
+			}
+			
+			/* Responsive - Single column on mobile */
+			@media screen and (max-width: 736px) {
+				#blog-posts-grid {
+					margin: 0 0 2em 0;
+					width: 100%;
+				}
+				
+				.blog-post-card {
+					margin: 0 0 3em 0;
+					width: 100%;
+				}
+				
+				.blog-post-card:before,
+				.blog-post-card:after {
+					display: none !important;
+				}
+				
+				.blog-post-title {
+					font-size: 1.1em;
+				}
+			}
+			
+			/* Small mobile screens */
+			@media screen and (max-width: 480px) {
+				.blog-post-card {
+					margin: 0 0 2em 0;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+
+					<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<ul class="icons">
+							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://scholar.google.com/citations?hl=en&user=C1cWkWYAAAAJ" class="icon brands fa-google" target="_blank" rel="noopener"><span class="label">Google Scholar</span></a></li>
+							<li><a href="https://github.com/vikasyadavv" class="icon brands fa-github" target="_blank" rel="noopener"><span class="label">Github</span></a></li>
+							<li><a href="https://medium.com/@vikasyadav_" class="icon brands fa-medium-m" target="_blank" rel="noopener"><span class="label">Medium</span></a></li>
+						</ul>
+					</header>
+
+					<!-- Blog Header -->
+					<section id="blog-header">
+						<header class="main">
+							<h1>Blog</h1>
+							<p>Insights on AI, Machine Learning, Technology, and Innovation</p>
+						</header>
+					</section>
+
+					<!-- Blog Posts Container -->
+					<section id="blog-posts-section">
+						<div id="loading-indicator" class="loading-spinner">
+							<div class="spinner"></div>
+							<p style="margin-top: 1em;">Loading posts...</p>
+						</div>
+						
+						<div id="error-container" style="display: none;">
+							<div class="error-message">
+								<h3>Oops! Something went wrong</h3>
+								<p id="error-text"></p>
+							</div>
+						</div>
+						
+						<div id="blog-posts-grid" class="posts" style="display: none;">
+							<!-- Blog posts will be dynamically inserted here -->
+						</div>
+						
+						<div id="no-posts-message" class="no-posts" style="display: none;">
+							<h3>No posts available yet</h3>
+							<p>Check back soon for new content!</p>
+						</div>
+					</section>
+
+					<!-- Pagination -->
+					<section id="pagination-section" style="display: none;">
+						<!-- Pagination will be dynamically generated -->
+					</section>
+
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div id="sidebar">
+				<div class="inner">
+
+					<!-- Search -->
+					<section id="search" class="alt">
+						<form method="post" action="#" id="blog-search-form">
+							<input type="text" name="query" id="search-query" placeholder="Search posts..." />
+						</form>
+					</section>
+
+					<!-- Menu -->
+					<nav id="menu">
+						<header class="major">
+							<h2>Navigation</h2>
+						</header>
+						<ul>
+							<li><a href="../index.html">Home</a></li>
+							<li><a href="../portfolio.html">Portfolio</a></li>
+							<li><a href="../projects.html">Projects</a></li>
+							<li>
+								<span class="opener active">Blog</span>
+								<ul>
+									<li><a href="index.html">All Posts</a></li>
+									<li><a href="ai-ml.html">AI & Machine Learning</a></li>
+									<li><a href="web-development.html">Web Development</a></li>
+									<li><a href="research.html">Research & Academia</a></li>
+									<li><a href="technology-trends.html">Technology Trends</a></li>
+								</ul>
+							</li>
+							<li>
+								<span class="opener">Tools & Services</span>
+								<ul>
+									<li><a href="../tools/ocr.html">OCR Document Processing</a></li>
+									<li><a href="../tools/webcrawler.html">Web Content Extractor</a></li>
+									<li><a href="../tools/chat.html">AI Assistant</a></li>
+									<li><a href="../tools/analytics.html">Analytics Dashboard</a></li>
+								</ul>
+							</li>
+							<li><a href="../about.html">About Me</a></li>
+							<li><a href="../contact.html">Contact</a></li>
+						</ul>
+					</nav>
+
+					<!-- Categories -->
+					<section>
+						<header class="major">
+							<h2>Categories</h2>
+						</header>
+						<ul class="contact">
+							<li><a href="#" data-category="all">All Posts</a></li>
+							<li><a href="#" data-category="ai">Artificial Intelligence</a></li>
+							<li><a href="#" data-category="ml">Machine Learning</a></li>
+							<li><a href="#" data-category="cloud">Cloud Computing</a></li>
+							<li><a href="#" data-category="innovation">Innovation</a></li>
+						</ul>
+					</section>
+
+					<!-- Contact Info -->
+					<section>
+						<header class="major">
+							<h2>Get in Touch</h2>
+						</header>
+						<p>Have questions or want to discuss these topics? Feel free to reach out!</p>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="mailto:info@vikasyadav.live">info@vikasyadav.live</a></li>
+							<li class="icon brands fa-telegram-plane"><a href="https://t.me/cheminations" target="_blank" rel="noopener">@cheminations</a></li>
+						</ul>
+					</section>
+
+					<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 2025 Cheminations. All rights reserved.</p>
+					</footer>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
+		<script src="../assets/js/blog.js"></script>
+
+	</body>
+</html>

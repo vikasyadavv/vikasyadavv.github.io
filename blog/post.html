@@ -1,0 +1,438 @@
+<!DOCTYPE HTML>
+<!--
+	VikasYadav.live - Blog Post Detail
+	Dynamic blog post viewer
+-->
+<html>
+	<head>
+		<title>Blog Post - Vikas Yadav</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Blog post by Vikas Yadav" />
+		<meta name="author" content="Vikas Yadav" />
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		
+		<style>
+			.post-header {
+				margin-bottom: 2em;
+			}
+			
+			.post-title {
+				font-size: 2.5em;
+				line-height: 1.3;
+				margin-bottom: 0.5em;
+				color: #f56565;
+			}
+			
+			.post-meta {
+				color: #999;
+				font-size: 0.9em;
+				margin-bottom: 2em;
+				padding-bottom: 1em;
+				border-bottom: 1px solid #eee;
+			}
+			
+			.post-status {
+				display: inline-block;
+				padding: 0.4em 1em;
+				border-radius: 20px;
+				font-size: 0.85em;
+				font-weight: bold;
+				text-transform: uppercase;
+				margin-left: 1em;
+			}
+			
+			.status-posted {
+				background: #48bb78;
+				color: white;
+			}
+			
+			.status-review {
+				background: #ed8936;
+				color: white;
+			}
+			
+			.post-featured-image {
+				width: 100%;
+				max-width: 500px;
+				height: auto;
+				object-fit: contain;
+				display: block;
+				margin: 0 auto 2em auto;
+			}
+			
+			.post-content {
+				font-size: 1.1em;
+				line-height: 1.8;
+				color: #333;
+			}
+			
+			.post-content p {
+				margin-bottom: 1.5em;
+			}
+			
+			.post-content h2 {
+				margin-top: 2em;
+				margin-bottom: 1em;
+				color: #f56565;
+			}
+			
+			.post-content h3 {
+				margin-top: 1.5em;
+				margin-bottom: 0.75em;
+				color: #666;
+			}
+			
+			.share-buttons {
+				margin-top: 3em;
+				padding-top: 2em;
+				border-top: 2px solid #eee;
+			}
+			
+			.share-buttons h3 {
+				margin-bottom: 1em;
+			}
+			
+			.share-btn {
+				display: inline-block;
+				padding: 0.75em 1.5em;
+				margin-right: 0.5em;
+				margin-bottom: 0.5em;
+				border-radius: 5px;
+				color: white;
+				text-decoration: none;
+				font-weight: bold;
+				transition: opacity 0.3s ease;
+			}
+			
+			.share-btn:hover {
+				opacity: 0.8;
+			}
+			
+			.share-twitter {
+				background: #1DA1F2;
+			}
+			
+			.share-linkedin {
+				background: #0077B5;
+			}
+			
+			.share-facebook {
+				background: #4267B2;
+			}
+			
+			.back-to-blog {
+				margin-top: 3em;
+				padding-top: 2em;
+				border-top: 1px solid #eee;
+			}
+			
+			.loading-post {
+				text-align: center;
+				padding: 5em 2em;
+			}
+			
+			.spinner {
+				border: 4px solid #f3f3f3;
+				border-top: 4px solid #f56565;
+				border-radius: 50%;
+				width: 50px;
+				height: 50px;
+				animation: spin 1s linear infinite;
+				margin: 0 auto 1em;
+			}
+			
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+			
+			.error-post {
+				background: #fed7d7;
+				color: #c53030;
+				padding: 2em;
+				border-radius: 8px;
+				margin: 2em 0;
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+
+					<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<ul class="icons">
+							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
+							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://scholar.google.com/citations?hl=en&user=C1cWkWYAAAAJ" class="icon brands fa-google" target="_blank" rel="noopener"><span class="label">Google Scholar</span></a></li>
+							<li><a href="https://github.com/vikasyadavv" class="icon brands fa-github" target="_blank" rel="noopener"><span class="label">Github</span></a></li>
+							<li><a href="https://medium.com/@vikasyadav_" class="icon brands fa-medium-m" target="_blank" rel="noopener"><span class="label">Medium</span></a></li>
+						</ul>
+					</header>
+
+					<!-- Loading State -->
+					<div id="loading-post" class="loading-post">
+						<div class="spinner"></div>
+						<p>Loading post...</p>
+					</div>
+
+					<!-- Error State -->
+					<div id="error-post" class="error-post" style="display: none;">
+						<h3>Post Not Found</h3>
+						<p id="error-message"></p>
+						<a href="index.html" class="button">Back to Blog</a>
+					</div>
+
+					<!-- Post Content -->
+					<article id="post-content" style="display: none;">
+						<header class="post-header">
+							<h1 class="post-title" id="post-title"></h1>
+							<div class="post-meta">
+								<span id="post-date"></span>
+								<span class="post-status" id="post-status"></span>
+							</div>
+						</header>
+
+						<img id="post-image" class="post-featured-image" alt="" />
+
+						<div class="post-content" id="post-body"></div>
+
+						<!-- Share Buttons -->
+						<div class="share-buttons">
+							<h3>Share this post</h3>
+							<a href="#" class="share-btn share-twitter" id="share-twitter" target="_blank" rel="noopener">
+								<i class="icon brands fa-twitter"></i> Share on Twitter
+							</a>
+							<a href="#" class="share-btn share-linkedin" id="share-linkedin" target="_blank" rel="noopener">
+								<i class="icon brands fa-linkedin"></i> Share on LinkedIn
+							</a>
+							<a href="#" class="share-btn share-facebook" id="share-facebook" target="_blank" rel="noopener">
+								<i class="icon brands fa-facebook"></i> Share on Facebook
+							</a>
+						</div>
+
+						<!-- Back to Blog -->
+						<div class="back-to-blog">
+							<a href="index.html" class="button">← Back to All Posts</a>
+						</div>
+					</article>
+
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div id="sidebar">
+				<div class="inner">
+
+					<!-- Menu -->
+					<nav id="menu">
+						<header class="major">
+							<h2>Navigation</h2>
+						</header>
+						<ul>
+							<li><a href="../index.html">Home</a></li>
+							<li><a href="../portfolio.html">Portfolio</a></li>
+							<li><a href="../projects.html">Projects</a></li>
+							<li>
+								<span class="opener active">Blog</span>
+								<ul>
+									<li><a href="index.html">All Posts</a></li>
+									<li><a href="ai-ml.html">AI & Machine Learning</a></li>
+									<li><a href="web-development.html">Web Development</a></li>
+									<li><a href="research.html">Research & Academia</a></li>
+									<li><a href="technology-trends.html">Technology Trends</a></li>
+								</ul>
+							</li>
+							<li>
+								<span class="opener">Tools & Services</span>
+								<ul>
+									<li><a href="../tools/ocr.html">OCR Document Processing</a></li>
+									<li><a href="../tools/webcrawler.html">Web Content Extractor</a></li>
+									<li><a href="../tools/chat.html">AI Assistant</a></li>
+									<li><a href="../tools/analytics.html">Analytics Dashboard</a></li>
+								</ul>
+							</li>
+							<li><a href="../about.html">About Me</a></li>
+							<li><a href="../contact.html">Contact</a></li>
+						</ul>
+					</nav>
+
+					<!-- Contact Info -->
+					<section>
+						<header class="major">
+							<h2>Get in Touch</h2>
+						</header>
+						<p>Have questions or want to discuss these topics? Feel free to reach out!</p>
+						<ul class="contact">
+							<li class="icon solid fa-envelope"><a href="mailto:info@vikasyadav.live">info@vikasyadav.live</a></li>
+							<li class="icon brands fa-telegram-plane"><a href="https://t.me/cheminations" target="_blank" rel="noopener">@cheminations</a></li>
+						</ul>
+					</section>
+
+					<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; 2025 Cheminations. All rights reserved.</p>
+					</footer>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
+		
+		<script>
+			// Blog Post Loader
+			(function() {
+				'use strict';
+
+				// Get slug from URL
+				const urlParams = new URLSearchParams(window.location.search);
+				const slug = urlParams.get('slug');
+
+				if (!slug) {
+					showError('No post specified');
+					return;
+				}
+
+				// Load post from localStorage
+				loadPost(slug);
+
+				function loadPost(slug) {
+					try {
+						const postDataStr = localStorage.getItem(`blog_post_${slug}`);
+						
+						if (!postDataStr) {
+							showError('Post not found. It may have been removed or the link is incorrect.');
+							return;
+						}
+
+						const postData = JSON.parse(postDataStr);
+						displayPost(postData);
+					} catch (error) {
+						console.error('Error loading post:', error);
+						showError('Error loading post. Please try again.');
+					}
+				}
+
+				function displayPost(post) {
+					// Hide loading, show content
+					document.getElementById('loading-post').style.display = 'none';
+					document.getElementById('post-content').style.display = 'block';
+
+					// Set title
+					document.getElementById('post-title').textContent = post.title;
+					document.title = post.title + ' - Vikas Yadav';
+
+					// Set meta
+					const statusElement = document.getElementById('post-status');
+					const status = post.status.toLowerCase();
+					statusElement.textContent = status === 'posted' ? 'Published' : 'New';
+					statusElement.className = 'post-status ' + (status === 'posted' ? 'status-posted' : 'status-review');
+
+					// Set date
+					document.getElementById('post-date').textContent = 'Published on ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+					<!-- Set image -->
+					const imageElement = document.getElementById('post-image');
+					imageElement.src = post.image;
+					imageElement.alt = post.title;
+					imageElement.loading = 'eager'; // Load featured image immediately
+					imageElement.onerror = function() {
+						this.onerror = null; // Prevent infinite loop
+						this.src = '../images/default-blog.jpg';
+					};
+
+					// Set content - convert line breaks to paragraphs
+					const content = formatContent(post.content);
+					document.getElementById('post-body').innerHTML = content;
+
+					// Set up share buttons
+					setupShareButtons(post.title, post.slug);
+
+					// Update meta tags
+					updateMetaTags(post);
+				}
+
+				function formatContent(text) {
+					if (!text) return '';
+
+					// Split by double newlines to get paragraphs
+					const paragraphs = text.split(/\n\n+/);
+					
+					let html = '';
+					paragraphs.forEach((para, index) => {
+						para = para.trim();
+						if (!para) return;
+
+						// Check if it's a heading (all caps or ends with colon)
+						if (index > 0 && (para === para.toUpperCase() || para.endsWith(':'))) {
+							html += `<h2>${para}</h2>`;
+						} else {
+							// Replace single newlines with <br>
+							const formatted = para.replace(/\n/g, '<br>');
+							html += `<p>${formatted}</p>`;
+						}
+					});
+
+					return html;
+				}
+
+				function setupShareButtons(title, slug) {
+					const url = encodeURIComponent(window.location.href);
+					const text = encodeURIComponent(title);
+
+					document.getElementById('share-twitter').href = 
+						`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+					
+					document.getElementById('share-linkedin').href = 
+						`https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+					
+					document.getElementById('share-facebook').href = 
+						`https://www.facebook.com/sharer/sharer.php?u=${url}`;
+				}
+
+				function updateMetaTags(post) {
+					// Update OG tags
+					let ogTitle = document.querySelector('meta[property="og:title"]');
+					if (!ogTitle) {
+						ogTitle = document.createElement('meta');
+						ogTitle.setAttribute('property', 'og:title');
+						document.head.appendChild(ogTitle);
+					}
+					ogTitle.setAttribute('content', post.title);
+
+					let ogImage = document.querySelector('meta[property="og:image"]');
+					if (!ogImage) {
+						ogImage = document.createElement('meta');
+						ogImage.setAttribute('property', 'og:image');
+						document.head.appendChild(ogImage);
+					}
+					ogImage.setAttribute('content', post.image);
+				}
+
+				function showError(message) {
+					document.getElementById('loading-post').style.display = 'none';
+					document.getElementById('error-post').style.display = 'block';
+					document.getElementById('error-message').textContent = message;
+				}
+
+			})();
+		</script>
+
+	</body>
+</html>
