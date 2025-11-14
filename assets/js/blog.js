@@ -21,6 +21,23 @@
 	let totalPages = 1;
 	let allValidPosts = [];
 
+	// Helper function to get base path (works for both local and GitHub Pages)
+	const getBasePath = function() {
+		const path = window.location.pathname;
+		// If in a subdirectory (blog/), go up one level
+		if (path.includes('/blog/')) {
+			return '../';
+		}
+		// If at root or index.html
+		return '';
+	};
+
+	// Helper function to get absolute image path
+	const getImagePath = function(relativePath) {
+		const basePath = getBasePath();
+		return basePath + relativePath;
+	};
+
 	// Utility Functions
 	const utils = {
 		/**
@@ -94,7 +111,8 @@
 				}
 			}
 			
-			return '../images/default-blog.jpg';
+			// Return fallback image with correct path
+			return getImagePath('images/default-blog.jpg');
 		},
 
 		/**
@@ -238,13 +256,15 @@
 			const statusClass = status === 'posted' ? 'status-posted' : 'status-review';
 			const statusLabel = status === 'posted' ? 'Published' : 'New';
 			
+			const fallbackImage = getImagePath('images/default-blog.jpg');
+			
 			return `
 				<article class="blog-post-card">
 					<a href="post.html?slug=${slug}" class="blog-post-image-wrapper">
 						<span class="blog-status ${statusClass}">${statusLabel}</span>
 						<img src="${image}" alt="${title}" class="blog-post-image" 
 							 loading="lazy"
-							 onerror="this.onerror=null; this.src='../images/default-blog.jpg';" />
+							 onerror="this.onerror=null; this.src='${fallbackImage}';" />
 					</a>
 					<div class="blog-post-content">
 						<h3 class="blog-post-title">
@@ -446,12 +466,14 @@
 				
 				utils.storePostData(post, slug);
 				
+				const fallbackImage = getImagePath('images/default-blog.jpg');
+				
 				return `
 					<article>
 						<a href="blog/post.html?slug=${slug}" class="image">
 							<img src="${image}" alt="${title}" 
 								 loading="lazy"
-								 onerror="this.onerror=null; this.src='images/default-blog.jpg';" />
+								 onerror="this.onerror=null; this.src='${fallbackImage}';" />
 						</a>
 						<h3>${title}</h3>
 						<p>${excerpt}</p>

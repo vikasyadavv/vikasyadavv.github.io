@@ -347,14 +347,17 @@
 					// Set date
 					document.getElementById('post-date').textContent = 'Published on ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-					<!-- Set image -->
+					// Set image with dynamic fallback path
 					const imageElement = document.getElementById('post-image');
 					imageElement.src = post.image;
 					imageElement.alt = post.title;
 					imageElement.loading = 'eager'; // Load featured image immediately
+					
+					// Determine fallback image path based on current location
+					const fallbackPath = window.location.pathname.includes('/blog/') ? '../images/default-blog.jpg' : 'images/default-blog.jpg';
 					imageElement.onerror = function() {
 						this.onerror = null; // Prevent infinite loop
-						this.src = '../images/default-blog.jpg';
+						this.src = fallbackPath;
 					};
 
 					// Set content - convert line breaks to paragraphs
