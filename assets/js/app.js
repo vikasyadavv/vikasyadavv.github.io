@@ -50,10 +50,13 @@ class VikasYadavApp {
 
     bindEvents() {
         // Newsletter subscription
+        // DISABLED - Now handled in index.html inline script with n8n integration
+        /*
         const newsletterForm = document.getElementById('newsletter-form');
         if (newsletterForm) {
             newsletterForm.addEventListener('submit', (e) => this.handleNewsletterSubscription(e));
         }
+        */
 
         // Search functionality
         const searchForm = document.querySelector('#search form');

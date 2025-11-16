@@ -195,7 +195,7 @@ class ChatWidget {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: message,
+                    message: `/chat ${message}`,
                     sessionId: this.sessionId,
                     context: this.getContext()
                 })
@@ -209,17 +209,43 @@ class ChatWidget {
 
             const data = await response.json();
             
-            if (data.success) {
-                this.sessionId = data.sessionId;
-                this.addMessage(data.response, 'bot', {
-                    suggestions: data.suggestions,
-                    timestamp: data.timestamp
-                });
-                this.updateConnectionStatus('online');
-                this.reconnectAttempts = 0;
+            // Extract response - handle different response formats
+            let botResponse = '';
+            
+            // Try to parse if response is a JSON string
+            if (data.success && data.response) {
+                botResponse = data.response;
+            } else if (data.response) {
+                botResponse = data.response;
+            } else if (data.message) {
+                botResponse = data.message;
+            } else if (typeof data === 'string') {
+                botResponse = data;
             } else {
-                throw new Error(data.message || 'Failed to get response');
+                botResponse = 'Received response from AI';
             }
+            
+            // If botResponse is a JSON string, try to parse it
+            if (typeof botResponse === 'string' && botResponse.startsWith('{')) {
+                try {
+                    const parsed = JSON.parse(botResponse);
+                    if (parsed.output) {
+                        botResponse = parsed.output;
+                    } else if (parsed.response) {
+                        botResponse = parsed.response;
+                    }
+                } catch (e) {
+                    // Keep original response if parsing fails
+                }
+            }
+            
+            this.sessionId = data.sessionId || this.sessionId;
+            this.addMessage(botResponse, 'bot', {
+                suggestions: data.suggestions || [],
+                timestamp: data.timestamp
+            });
+            this.updateConnectionStatus('online');
+            this.reconnectAttempts = 0;
 
         } catch (error) {
             this.hideBotTyping();
