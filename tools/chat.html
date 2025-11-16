@@ -759,7 +759,126 @@
 				// State
 				let currentEndpoint = 'chat';
 				let conversationHistory = [];
-				let sessionId = 'agentic_ai_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+				let sessionId;
+				let userAnalytics = {};
+
+				// Initialize or retrieve session from localStorage
+				async function initializeSession() {
+					sessionId = localStorage.getItem('agentic_ai_session');
+					
+					if (!sessionId) {
+						// New user - create session
+						sessionId = 'agentic_ai_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+						localStorage.setItem('agentic_ai_session', sessionId);
+						localStorage.setItem('agentic_ai_first_visit', new Date().toISOString());
+						
+						// Collect user analytics on first visit
+						console.log('🆕 New user detected - collecting analytics...');
+						userAnalytics = await collectUserAnalytics();
+						localStorage.setItem('agentic_ai_analytics', JSON.stringify(userAnalytics));
+						
+						// Send analytics to n8n
+						sendAnalyticsToN8N(sessionId, userAnalytics);
+					} else {
+						// Returning user
+						const firstVisit = localStorage.getItem('agentic_ai_first_visit');
+						const storedAnalytics = localStorage.getItem('agentic_ai_analytics');
+						if (storedAnalytics) {
+							userAnalytics = JSON.parse(storedAnalytics);
+						}
+						console.log(`👋 Welcome back! Session: ${sessionId.substring(0, 20)}...`);
+						console.log(`📅 First visit: ${firstVisit}`);
+					}
+				}
+
+				// Collect comprehensive user analytics
+				async function collectUserAnalytics() {
+					const analytics = {
+						// Session info
+						sessionId: sessionId,
+						firstVisit: new Date().toISOString(),
+						
+						// Browser & Device
+						userAgent: navigator.userAgent,
+						language: navigator.language,
+						languages: navigator.languages ? navigator.languages.join(', ') : navigator.language,
+						platform: navigator.platform,
+						
+						// Screen & Display
+						screenResolution: `${screen.width}x${screen.height}`,
+						screenColorDepth: screen.colorDepth,
+						viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+						
+						// Device capabilities
+						deviceMemory: navigator.deviceMemory || 'unknown',
+						cpuCores: navigator.hardwareConcurrency || 'unknown',
+						
+						// Time & Location
+						timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+						timezoneOffset: new Date().getTimezoneOffset(),
+						
+						// Connection
+						connectionType: navigator.connection?.effectiveType || 'unknown',
+						connectionDownlink: navigator.connection?.downlink || 'unknown',
+						
+						// Features
+						cookiesEnabled: navigator.cookieEnabled,
+						doNotTrack: navigator.doNotTrack || 'unknown',
+						touchSupport: 'ontouchstart' in window,
+						
+						// Page info
+						referrer: document.referrer || 'Direct visit',
+						currentPage: window.location.href,
+						pageTitle: document.title
+					};
+					
+					// Get IP & Geolocation (async)
+					try {
+						const geoResponse = await fetch('https://ipapi.co/json/');
+						if (geoResponse.ok) {
+							const geoData = await geoResponse.json();
+							analytics.ip = geoData.ip || 'unknown';
+							analytics.city = geoData.city || 'unknown';
+							analytics.region = geoData.region || 'unknown';
+							analytics.country = geoData.country_name || 'unknown';
+							analytics.countryCode = geoData.country_code || 'unknown';
+							analytics.latitude = geoData.latitude || null;
+							analytics.longitude = geoData.longitude || null;
+							analytics.isp = geoData.org || 'unknown';
+							analytics.postalCode = geoData.postal || 'unknown';
+							console.log('✅ Geolocation data collected');
+						}
+					} catch (error) {
+						console.log('⚠️ Geolocation API unavailable:', error.message);
+						analytics.ip = 'unavailable';
+						analytics.geoError = error.message;
+					}
+					
+					return analytics;
+				}
+
+				// Send analytics to n8n
+				function sendAnalyticsToN8N(sessionId, analytics) {
+					const apiUrl = 'https://vikasyadav-api.vikas4770.workers.dev';
+					
+					fetch(`${apiUrl}/api/chat/message`, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							message: '/analytics_init',
+							sessionId: sessionId,
+							userAnalytics: analytics,
+							metadata: {
+								eventType: 'new_user_analytics',
+								timestamp: new Date().toISOString()
+							}
+						})
+					}).then(() => {
+						console.log('📊 Analytics sent to n8n');
+					}).catch(error => {
+						console.log('⚠️ Failed to send analytics:', error.message);
+					});
+				}
 
 				// Endpoint configurations
 				const endpoints = {
@@ -822,7 +941,10 @@
 			const clearChatBtn = document.getElementById('clear-chat');
 
 			// Initialize
-				function init() {
+				async function init() {
+					// Initialize session first
+					await initializeSession();
+					
 					// Endpoint button listeners
 					document.querySelectorAll('.endpoint-btn').forEach(btn => {
 						btn.addEventListener('click', function() {
@@ -852,6 +974,7 @@
 					clearChatBtn.addEventListener('click', clearChat);
 
 					console.log('✅ Agentic AI Assistant initialized');
+					console.log(`🔑 Session ID: ${sessionId.substring(0, 25)}...`);
 				}
 
 				// Switch endpoint
@@ -946,6 +1069,7 @@
 
 				console.log(`📤 Sending to ${currentEndpoint}:`, formattedMessage);
 				console.log(`📍 API URL: ${apiUrl}/api/chat/message`);
+				console.log(`🔑 Session ID: ${sessionId.substring(0, 25)}...`);
 
 				const response = await fetch(`${apiUrl}/api/chat/message`, {
 					method: 'POST',
@@ -955,10 +1079,12 @@
 					body: JSON.stringify({
 						message: formattedMessage,
 						sessionId: sessionId,
+						userAnalytics: userAnalytics,
 						context: {
 							page: 'agentic-ai-assistant',
 							endpoint: currentEndpoint,
-							timestamp: new Date().toISOString()
+							timestamp: new Date().toISOString(),
+							conversationLength: conversationHistory.length
 						}
 					})
 				});
