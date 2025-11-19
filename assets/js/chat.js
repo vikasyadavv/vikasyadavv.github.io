@@ -773,8 +773,8 @@ const chatStyles = `
         height: calc(100vh - 140px);
         bottom: 80px;
         right: auto;
-        left: 50%;
-        transform: translateX(-100%);
+        left: 80%;
+        transform: translateX(-80%);
     }
 }
 `;
