@@ -774,7 +774,7 @@ const chatStyles = `
         bottom: 80px;
         right: auto;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-100%);
     }
 }
 `;
