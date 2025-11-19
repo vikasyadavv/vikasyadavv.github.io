@@ -277,15 +277,14 @@
 						gap: 0.5em;
 					}
 
-					/* Flip Card Container */
-					.flip-card-container {
-						position: relative;
-						width: 100%;
-						height: 280px;
-						margin-bottom: 1.5em;
-					}
-
-					.flip-card {
+				/* Flip Card Container */
+				.flip-card-container {
+					position: relative;
+					width: 100%;
+					height: 280px;
+					margin-bottom: 1.5em;
+					min-height: 280px;
+				}					.flip-card {
 						position: relative;
 						width: 100%;
 						height: 100%;
@@ -297,19 +296,20 @@
 						transform: rotateY(180deg);
 					}
 
-					.card-face {
-						position: absolute;
-						width: 100%;
-						height: 100%;
-						backface-visibility: hidden;
-						-webkit-backface-visibility: hidden;
-						border-radius: 8px;
-						padding: 1.5em;
-						background: rgba(255, 255, 255, 0.1);
-						backdrop-filter: blur(10px);
-					}
-
-					.card-face-back {
+				.card-face {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					backface-visibility: hidden;
+					-webkit-backface-visibility: hidden;
+					border-radius: 8px;
+					padding: 1.5em;
+					background: rgba(255, 255, 255, 0.1);
+					backdrop-filter: blur(10px);
+					display: flex;
+					flex-direction: column;
+					overflow: hidden;
+				}					.card-face-back {
 						transform: rotateY(180deg);
 					}
 
@@ -325,13 +325,12 @@
 						padding-bottom: 0.5em;
 					}
 
-					.stats-grid {
-						display: grid;
-						grid-template-columns: repeat(3, 1fr);
-						gap: 1em;
-					}
-
-					.stat-card {
+				.stats-grid {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					gap: 1em;
+					flex-shrink: 0;
+				}					.stat-card {
 						background: rgba(255, 255, 255, 0.15);
 						padding: 1em 0.5em;
 						border-radius: 8px;
@@ -363,13 +362,13 @@
 						letter-spacing: 0.5px;
 					}
 
-					/* Progress Ring */
-					.stats-visual {
-						text-align: center;
-						margin-top: 1em;
-					}
-
-					.progress-ring {
+				/* Progress Ring */
+				.stats-visual {
+					text-align: center;
+					margin-top: auto;
+					padding-top: 1em;
+					flex-shrink: 0;
+				}					.progress-ring {
 						position: relative;
 						width: 100px;
 						height: 100px;
@@ -453,23 +452,72 @@
 						50% { transform: translateY(-5px); }
 					}
 
-					@media screen and (max-width: 736px) {
-						.stats-grid {
-							grid-template-columns: 1fr;
-							gap: 0.75em;
-						}
-						
-						.stat-value {
-							font-size: 1.8em;
-						}
-
-						.flip-card-container {
-							height: 320px;
-						}
+				@media screen and (max-width: 736px) {
+					.scholar-stats-card {
+						padding: 1.5em 1em;
 					}
-				</style>
 
-				<h3>
+					.scholar-stats-card h3 {
+						font-size: 1.1em;
+						margin-bottom: 1em;
+					}
+
+					.flip-card-container {
+						height: 350px;
+						min-height: 350px;
+					}
+
+					.card-face {
+						padding: 1em 0.75em;
+					}
+
+					.card-title {
+						font-size: 0.95em;
+						margin-bottom: 0.75em;
+						padding-bottom: 0.4em;
+					}
+
+					.stats-grid {
+						grid-template-columns: repeat(3, 1fr);
+						gap: 0.5em;
+					}
+					
+					.stat-card {
+						padding: 0.75em 0.3em;
+					}
+
+					.stat-value {
+						font-size: 1.4em;
+					}
+
+					.stat-label {
+						font-size: 0.65em;
+					}
+
+					.stats-visual {
+						padding-top: 0.5em;
+					}
+
+					.progress-ring {
+						width: 70px;
+						height: 70px;
+					}
+
+					.progress-text {
+						font-size: 1.2em;
+					}
+
+					.progress-label {
+						font-size: 0.7em;
+						margin-top: 0.3em;
+					}
+
+					.flip-indicator {
+						font-size: 0.7em;
+						margin-bottom: 0.75em;
+					}
+				}
+			</style>				<h3>
 					<i class="icon brands fa-google"></i>
 					Research Impact
 				</h3>
