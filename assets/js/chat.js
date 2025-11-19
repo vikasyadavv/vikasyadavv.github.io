@@ -771,9 +771,10 @@ const chatStyles = `
     .chat-window {
         width: calc(100vw - 40px);
         height: calc(100vh - 140px);
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
+        bottom: 80px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 `;
