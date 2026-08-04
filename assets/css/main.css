@@ -1596,6 +1596,81 @@ button,
     margin-top: 0;
     padding-top: 0; }
 
+/* Coming Soon */
+#menu a.coming-soon-link {
+  align-items: center;
+  display: flex;
+  gap: 0.75em;
+  justify-content: space-between; }
+
+a.coming-soon-link:not(.image)::after {
+  background: rgba(245, 106, 106, 0.1);
+  border: solid 1px rgba(245, 106, 106, 0.3);
+  border-radius: 999px;
+  color: #f56a6a;
+  content: "Soon";
+  flex: 0 0 auto;
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.62em;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 0.42em 0.62em;
+  text-transform: uppercase;
+  white-space: nowrap; }
+
+a.image.coming-soon-visual {
+  align-items: center;
+  aspect-ratio: 2 / 1;
+  background:
+    radial-gradient(circle at 75% 24%, rgba(104, 116, 236, 0.2), transparent 32%),
+    radial-gradient(circle at 18% 82%, rgba(245, 106, 106, 0.2), transparent 38%),
+    repeating-linear-gradient(90deg, rgba(61, 68, 73, 0.04) 0, rgba(61, 68, 73, 0.04) 1px, transparent 1px, transparent 24px),
+    linear-gradient(135deg, #fbfbfd, #f1f3f9);
+  display: flex !important;
+  justify-content: center;
+  isolation: isolate; }
+  a.image.coming-soon-visual::before {
+    animation: coming-soon-scan 4.8s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(245, 106, 106, 0.2), rgba(104, 116, 236, 0.18), transparent);
+    content: "";
+    inset: 0;
+    position: absolute;
+    transform: translateX(-105%);
+    z-index: -1; }
+  a.image.coming-soon-visual::after {
+    background: rgba(255, 255, 255, 0.86);
+    border: solid 1px rgba(245, 106, 106, 0.28);
+    border-radius: 999px;
+    color: #f56a6a;
+    content: "Coming soon";
+    font-size: 0.7em;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 0.4em 0.75em;
+    position: absolute;
+    right: 0.8em;
+    text-transform: uppercase;
+    top: 0.8em; }
+  .coming-soon-visual-mark {
+    animation: coming-soon-float 3.6s ease-in-out infinite;
+    color: #6c74dc;
+    font-size: 2.4em;
+    filter: drop-shadow(0 8px 12px rgba(61, 68, 73, 0.14)); }
+
+@keyframes coming-soon-scan {
+  0%, 18% { transform: translateX(-105%); }
+  72%, 100% { transform: translateX(105%); } }
+
+@keyframes coming-soon-float {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-0.18em) rotate(4deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  a.image.coming-soon-visual::before,
+  .coming-soon-visual-mark {
+    animation: none; } }
+
 /* Features */
 .features {
   display: -moz-flex;
