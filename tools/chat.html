@@ -28,6 +28,7 @@
 		<meta name="mobile-web-app-capable" content="yes" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/logo-animation.css" />
 		<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
 		
 		<style>
@@ -494,7 +495,12 @@
 
 					<!-- Header -->
 					<header id="header">
-						<a href="../index.html" class="logo"><strong>VikasYadav</strong>.live</a>
+						<a href="../index.html" class="logo cheminations-logo" aria-label="Cheminations homepage">
+							<span class="cheminations-logo-stage">
+								<strong class="cheminations-logo-word">Cheminations</strong>
+								<canvas class="cheminations-logo-canvas" aria-hidden="true"></canvas>
+							</span>
+						</a>
 						<ul class="icons">
 							<li><a href="https://x.com/vikasyadav__" class="icon brands fa-twitter" target="_blank" rel="noopener"><span class="label">Twitter</span></a></li>
 							<li><a href="https://www.linkedin.com/in/vikasyadavv/" class="icon brands fa-linkedin-in" target="_blank" rel="noopener"><span class="label">LinkedIn</span></a></li>
@@ -768,6 +774,7 @@
 		<script src="../assets/js/breakpoints.min.js"></script>
 		<script src="../assets/js/util.js"></script>
 		<script src="../assets/js/main.js"></script>
+		<script src="../assets/js/logo-animation.js"></script>
 		
 		<script>
 			// Agentic AI Assistant JavaScript
